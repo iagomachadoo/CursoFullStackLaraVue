@@ -1,0 +1,8 @@
+Curso Full Stack LaraVue
+
+COMANDOS
+
+-Verificar versão do laravel -> php artisan --version
+-Iniciar um servidor local -> php artisan serve
+-Instalar composer globalmente -> composer global require laravel/installer
+-Criar projeto com composer global -> laravel new nomeProjeto
