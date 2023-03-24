@@ -24,6 +24,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        /* Validação global dos parâmetros das rotas */
+        Route::pattern('age', '[0-9]+');
+        Route::pattern('name', '[a-zA-Z]+');
+
         $this->configureRateLimiting();
 
         $this->routes(function () {

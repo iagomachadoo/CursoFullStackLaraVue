@@ -3,6 +3,52 @@ Curso Full Stack LaraVue
 COMANDOS
 
 -Verificar versão do laravel -> php artisan --version
+
 -Iniciar um servidor local -> php artisan serve
+
 -Instalar composer globalmente -> composer global require laravel/installer
+
 -Criar projeto com composer global -> laravel new nomeProjeto
+
+-Mais detalhes de um comando artisan -> php artisan help nomeComando (Ex: nomeComando - make:controller)
+
+-Subir as tabelas pro banco de dados -> php artisan migrate (caso o banco de dados não esteja criado, esse comando cria e sobre as tabelas, o nome do banco de dados será o que está nas configurações de ambiente - .env - DB_DATABASE='')
+
+
+ESTRUTURA DE ARQUIVOS
+
+-composer.json -> lista as dependências instaladas no projeto
+
+-package.json -> lista de dependências para o front-end
+
+-/config -> armazena os arquivos de config do projeto. Esses arquivos puxam informações do .env
+
+-/public -> é a pasta pública do laravel a qual um servidor deve apontar
+
+-/public/index.php -> arquivo de entrada do laravel
+
+-/storage -> armazena dados do sistema, como arquivos de upload
+
+ROTAS
+
+-O carregamentos das rotas (web/api) são feitos dentro de app/providers/RouteServiceProvider.php no método boot()
+
+-Estrutura de uma rota -> Route::get(uri, callback) - Route é uma classe | get() é um verbo http | uri é a url da rota | callback é o retorno da rota que aceita uma função, array e string
+
+-Rotas nomeadas -> Route::get(uri, callback)->name('nomeRota') - O método name() atribui um nome para a rota. Na montagem de links na view, podemos ao invés de usar a url, apenas passar o nome da rota, deixando que o laravel vá atrás da rota com esse nome. Essa funcionalidade faz com que, caso mudemos a url da rota, na se altera, porque estamos referenciando a rota pelo seu nome 
+
+-Redirecionamento de rotas -> Caso 1 - Sem o uso de lógica. Quando o usuário acessar uma rota ele será redirecionado para outra. Essa situação é interessante quando há a troca do endereço da rota. Nesse caso, devemos passar o parâmetro com o status do redirecionamento, esses status são os códigos 3xx. O laravel disponibiliza o método permanentRedirect() que já trás o status internamente | Caso 2 - Quando é necessário aplicar alguma lógica. Dentro da rota origem, criamos a rota e a lógica e no final da rota damos um retorno com o helper global redirect(), passando para ele a rota destino. Mas a forma mais aconselhável de criar redirecionamentos é utilizando o nome da rota ao invés da url, para isso, deixamos de passar a url para o método redirect e concatenamos a ele outro helper global, o route() e então, dentro do route() passamos o nome da rota
+
+-Rotas de visualização -> Esse caso é valido quando não precisamos passar por algum controller com as regras de negócio para no final mostrar uma view. O retorno da view é feito diretamente pela rota através do método. Também podemos passar variáveis para a view nesse caso, para isso, basta passar como terceiro parâmetro um array com os valores - Route::view(url, view, ['chave' => 'valor'])
+
+-Rotas com parâmetro -> Caso 1 - Parâmetro obrigatório. Se o parâmetro não for passado, teremos um 404 - Route::get('user/{id}', function($id){}) | Caso 2 - Parâmetro opcional. Com o parâmetro opcional, se o parâmetro não for passado, não teremos um 404 como retorno, pois indicamos ao laravel através da sintaxe {par?} que podemos ou não passá-lo. Mas o callback ainda fica esperando um valor para o parâmetro, então devemos inicializar ele com um valor padrão - $par = null (esse valor padrão pode ser qualquer valor) - Route::get('user/{id?}', function($id = valorDefault){}). Podemos também passar mais de um parâmetro, tanto obrigatório como opcional (a ordem desses parâmetros importa) - Route::get('user/{id?}/{nome?}', function($id = valorDefault, $nome = valorDefault){})
+
+-Validando o tipo do parâmetro -> Para validarmos o parâmetro da rota, devemos utilizar o método where() passando para ele o parâmetro a ser validado e a expressão regular que limitará o formato do parâmetro (caso a rota tenha mais de um parâmetro, o método where aceita um array) - Route::get(rota/{par})->where(['par', 'regex']). Mas o laravel já disponibiliza helpers que fazem essa validação implicitamente, como o whereNumber(), whereAlpha() e outros mais | Quando a validação de parâmetros se tornar repetitiva, o ideal é torná-la global, criando essas verificações dentro do arquivo app/providers/RouteServiceProvider.php, para isso, dentro do método boot() desse arquivo, devemos usar a classe Route::pattern('par', 'regex'), assim, todas as rotas que tiverem esse parâmetro, terão a validação
+
+-Grupo de rotas -> PREFIXO - dá o prefixo na url - Route::prefix()->group() | NAME - dá o prefixo no nome da rota - Route::name()->group() | MIDDLEWARE - cria uma barreira para a requisição - Route::middleware()->group() - app/http/kernel.php controla as camadas web/api. Dentro dele já existem middleware prefixados para essas camadas, ou seja, qualquer requisição para essas camadas já passam por esses middleware por default. Nesse arquivo também contém os middleware default das rotas ($middlewareAliases[])
+
+-Fallback -> funciona como um backup, caso ocorra algum erro no sistema. Ou seja, se não conseguirmos acessar nenhuma rota listada no sistema o fallback entra em ação, então, ao invés de termos um erro 404, teremos o que foi passado no fallback - Route::fallback(function(){})
+
+-Injeção de dependência -> Serve para injetarmos um classe - Route::get(uri, function(Classe $classe){}) 
+
+-Injeção de model -> A injeção de model funciona da mesma forma que a de dependência, contudo, na de model estamos injetando um model - Route::get(uri, function(Model $model){}) 
