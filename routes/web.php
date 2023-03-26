@@ -168,3 +168,54 @@ Route::prefix('painel2')->name('painel2.')->group(function(){
         return 'Usuário - ' . $user;
     })->name('user');
 });
+
+//MIDDLEWARE
+//Usando middleware diretamente na rota
+//Podemos passar um array ao invés de uma string, nos casos onde queremos aplicar mais de um middleware
+Route::get('user8', function(){
+    return "Olá!";
+})->middleware('userAgent');
+
+//Usando um middleware global - o middleware agr está sendo aplicado em todas as requisições de forma global, para isso, o middleware foi registrado no atributo $middleware do arquivo app/http/kernel.php
+Route::get('user9', function(){
+    return "Olá!";
+});
+
+//Aplicando middleware no grupo de rotas
+//Podemos aplicar mais de um middleware nas rotas, passando ao invés de uma string, um array com todos os middleware que queremos aplicar. A ordem em que esses middleware serão aplicados depende de sua posição dentro do array. Nesse caso abaixo, o primeiro a ser aplicado será o checkToken
+Route::middleware(['checkToken', 'userAgent'])->group(function(){
+    Route::get('user10', function(){
+        return "User";
+    });
+    
+    Route::get('posts', function(){
+        return "Posts";
+    });
+    
+    //Removendo uma rota da aplicação da regra do middleware dentro de um grupo de rotas
+    Route::get('services', function(){
+        return "Services";
+    })->withoutMiddleware('userAgent');
+});
+
+//Podemos ao invés de passar todos os middleware num array, podendo deixar muito verboso, criar um grupo de middleware e passá-lo para a rota. Esse grupo deve ser criado dentro do atributo $middlewareGroups do arquivo app/http/kernel.php
+Route::middleware('myApp')->group(function(){
+    Route::get('user11', function(){
+        return "User";
+    });
+    
+    Route::get('posts1', function(){
+        return "Posts";
+    });
+    
+    Route::get('services2', function(){
+        return "Services";
+    });
+});
+
+//Passando parâmetro para a middleware
+//Podemos passar parâmetros pra dentro de uma middleware aplicado a uma rota, mas para que isso seja possível, o registro do middleware que vai receber o parâmetro, deve ser feito no atributo $middlewareAliases. A sintaxe para passar um parâmetro para o middleware é middleware('nomeMiddleware:parâmetro')
+//Dentro do middleware, no método handle, passamos como 3º parâmetro uma variável que vai receber o valor passado para o middleware
+Route::get('admin', function(){
+    return "Admin";
+})->middleware('checkToken:editor');

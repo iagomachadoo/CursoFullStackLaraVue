@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\checkToken;
+use App\Http\Middleware\UserAgent;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -15,6 +17,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
+        // \App\Http\Middleware\UserAgent::class, // Registrando middleware globalmente
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
@@ -43,6 +46,12 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+
+        //Adicionando um novo grupo de middleware. A ordem de declaração do middleware importa
+        'myApp' => [
+            \App\Http\Middleware\checkToken::class,
+            \App\Http\Middleware\UserAgent::class,
+        ],
     ];
 
     /**
@@ -53,6 +62,8 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $middlewareAliases = [
+        'checkToken' => checkToken::class, // Registrando middleware para rotas
+        'userAgent' => UserAgent::class, // Registrando middleware para rotas
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
@@ -63,5 +74,11 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+    ];
+
+    //Definindo globalmente (toda forma de uso de middleware seguirá essa ordem) ordem de prioridade dos middleware
+    public $middlewarePriority = [
+        //\App\Http\Middleware\checkToken::class,
+        //\App\Http\Middleware\UserAgent::class,
     ];
 }

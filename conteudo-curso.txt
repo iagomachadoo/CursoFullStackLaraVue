@@ -1,7 +1,6 @@
 Curso Full Stack LaraVue
 
 COMANDOS
-
 -Verificar versão do laravel -> php artisan --version
 
 -Iniciar um servidor local -> php artisan serve
@@ -14,9 +13,11 @@ COMANDOS
 
 -Subir as tabelas pro banco de dados -> php artisan migrate (caso o banco de dados não esteja criado, esse comando cria e sobre as tabelas, o nome do banco de dados será o que está nas configurações de ambiente - .env - DB_DATABASE='')
 
+-Criar um middleware -> php artisan make:middleware NomeMiddleware
+
+
 
 ESTRUTURA DE ARQUIVOS
-
 -composer.json -> lista as dependências instaladas no projeto
 
 -package.json -> lista de dependências para o front-end
@@ -29,8 +30,9 @@ ESTRUTURA DE ARQUIVOS
 
 -/storage -> armazena dados do sistema, como arquivos de upload
 
-ROTAS
 
+
+ROTAS
 -O carregamentos das rotas (web/api) são feitos dentro de app/providers/RouteServiceProvider.php no método boot()
 
 -Estrutura de uma rota -> Route::get(uri, callback) - Route é uma classe | get() é um verbo http | uri é a url da rota | callback é o retorno da rota que aceita uma função, array e string
@@ -52,3 +54,18 @@ ROTAS
 -Injeção de dependência -> Serve para injetarmos um classe - Route::get(uri, function(Classe $classe){}) 
 
 -Injeção de model -> A injeção de model funciona da mesma forma que a de dependência, contudo, na de model estamos injetando um model - Route::get(uri, function(Model $model){}) 
+
+
+
+MIDDLEWARE
+-Middleware -> os middleware agem como uma barreira entre a requisição e a aplicação, podendo ou não bloquear essa requisição. Um middleware nem sempre faz uma validação, podemos aplicar alguma rotina, como por exemplo, pegar o user agent do usuário. 
+
+-Criando e aplicando middleware -> Para criar um middleware usamos o comando artisan make:middleware, depois do arquivo criado, precisamos registrar esse novo middleware para que o laravel saiba de sua existência, o registro de middleware para rotas (esse caso é para quando iremos usar um middleware diretamente em uma rota com o método middleware()) fica dentro de app/http/kernel.php no atributo $middlewareAliases, já na rota, temos que concatenar o método middleware('NomeMiddleware') para que ele seja aplicado, mas esse formato demanda que passemos esse método middleware('NomeMiddleware') em todas as rotas ou grupo de rotas que queremos que ele seja aplicado. 
+
+-Middleware global -> Podemos declarar um middleware globalmente passando a classe do middleware para o atributo global $middleware dentro de app/http/kernel.php e a partir disso, todas as requisições passarão por esse middleware sem a necessidade de usarmos o método middleware()
+
+-Grupo de middleware -> Quando estamos utilizando grupos de rotas passando mais de um middleware para as rotas, dependendo da quantidade de middleware, podemos deixar nosso grupo de rotas muito verboso, para minimizar isso, temos a possibilidade de criar um grupo de middleware. Para criar esse grupo, devemos adicionar um novo grupo de middleware dentro do atributo middlewareGroups do arquivo app/http/kernel.php, aqui, a ordem do middleware dentro do grupo importa
+
+-Definindo prioridade de middleware -> Podemos definir a ordem de aplicação dos middleware de forma global, ou seja, toda aplicação de middleware seguirá essa ordem - diretamente na rota, grupo de middleware e etc - para fazer isso, temos que criar o atributo público $middlewarePriority dentro do arquivo app/http/kernel.php e passar os middleware na ordem desejada
+
+-Passando parâmetro da dentro da middleware -> Podemos passar parâmetros pra dentro de uma middleware aplicado a uma rota, mas para que isso seja possível, o registro do middleware que vai receber o parâmetro, deve ser feito no atributo $middlewareAliases. A sintaxe para passar um parâmetro para o middleware é middleware('nomeMiddleware:parâmetro'). Dentro do middleware, no método handle, passamos como 3º parâmetro uma variável que vai receber o valor passado para o middleware
