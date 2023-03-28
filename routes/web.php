@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\User2Controller;
+use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -219,3 +222,40 @@ Route::middleware('myApp')->group(function(){
 Route::get('admin', function(){
     return "Admin";
 })->middleware('checkToken:editor');
+
+//CONTROLLER
+//Ligando um controller a uma rota
+//Nova estrutura da rota - (uri, [controller, métodoDoController])
+Route::get('users3', [UserController::class, 'index'])->name('users.index');
+
+//Passando parâmetro pro controller
+Route::get('users3/{id}', [UserController::class, 'show'])->name('user.show');
+
+//Model bilnding
+Route::get('users4/{user}', [UserController::class, 'show2'])->name('user.show2');
+
+//Controller de ação única
+//Essa rota invoca automaticamente o controller através da sua classe, porque o controller tem o método __invoke
+Route::get('checkout/{token}', CheckoutController::class);
+
+//Controller resource
+//O método resource é utilizado para chamar um controller de CRUD
+//Para criar esse controller, devemos usar a option --resource no comando make
+//Quando criamos um controller dessa maneira, ele já vem por default com todos os métodos do CRUD criados
+//Podemos adicionar outra option a esse comando, --model=NomeModel para o controller já vir com o model binding feito
+Route::resource('users5', User2Controller::class);
+
+//Personalizando o resource
+//Método only() - cria apenas as rotas para os métodos passados como parâmetro
+Route::resource('users6', User2Controller::class)->only(['index', 'edit']);
+
+//Método except() - cria todas as rotas, menos as para os métodos passados como parâmetro
+Route::resource('users7', User2Controller::class)->except(['index', 'edit']);
+
+//Mais de um resource
+//Utilizamos o método resources ao invés de resource
+//Passamos as uri e classes dentro de um array associativo
+Route::resources([
+    'users8' => User2Controller::class,
+    'posts2' => User2Controller::class
+]);

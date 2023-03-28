@@ -13,14 +13,16 @@ class checkToken
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, $role): Response
+    public function handle(Request $request, Closure $next, /* $role */): Response
     {
+        dd('checkToken');
+
         //$role recebe o valor passado para o middleware (pode ser qualquer nome)
-        if($role === 'admin'){
+        /* if($role === 'admin'){
             dd('checkToken ' . $role);
         }else if($role === 'editor'){
             dd('checkToken ' . $role);
-        }
+        } */
 
         //Validando um token
         if($request->input('token') !== 'abc'){

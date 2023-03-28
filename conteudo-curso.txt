@@ -15,7 +15,9 @@ COMANDOS
 
 -Criar um middleware -> php artisan make:middleware NomeMiddleware
 
+-Criar um controller -> php artisan make:controller NomeController 
 
+-Criar controller de ação única -> php artisan make:controller NomeController --invokable
 
 ESTRUTURA DE ARQUIVOS
 -composer.json -> lista as dependências instaladas no projeto
@@ -69,3 +71,22 @@ MIDDLEWARE
 -Definindo prioridade de middleware -> Podemos definir a ordem de aplicação dos middleware de forma global, ou seja, toda aplicação de middleware seguirá essa ordem - diretamente na rota, grupo de middleware e etc - para fazer isso, temos que criar o atributo público $middlewarePriority dentro do arquivo app/http/kernel.php e passar os middleware na ordem desejada
 
 -Passando parâmetro da dentro da middleware -> Podemos passar parâmetros pra dentro de uma middleware aplicado a uma rota, mas para que isso seja possível, o registro do middleware que vai receber o parâmetro, deve ser feito no atributo $middlewareAliases. A sintaxe para passar um parâmetro para o middleware é middleware('nomeMiddleware:parâmetro'). Dentro do middleware, no método handle, passamos como 3º parâmetro uma variável que vai receber o valor passado para o middleware
+
+
+
+CONTROLLER
+-Um controller serve  para controlar a requisição do usuário, fazer o processamento necessário e ao final, devolver esses dados para o usuário
+
+-A convenção de nomenclatura para controllers é o uso do pascal case com a primeira palavra no singular seguido por controller (Ex: UserController)
+
+-Para ligar uma rota a um controller, devemos mudar um pouco a estrutura padrão da rota, onde passamos uma função como segundo parâmetro (Route::get(uri, function)). Então, no lugar da função, devemos passar um array com a primeira posição sendo ocupada pelo controller e a segunda, pelo método que iremos usar desse controller (Route::get(uri, [NomeController::class, 'nomeMétodo']))
+
+-Passando parâmetros pro controller -> Para passarmos um parâmetro vindo da rota pro controller, primeiro, nesse rota, devemos declarar o parâmetro (rota/{parâmetro}) para depois, no método do controller, declararmos esse parâmetro (public function método($parâmetro)). O ideal é que ambos tenham o mesmo nome
+
+-Injeção de dependência no controller -> Injetaremos uma classe dentro de um método do controller. Para fazer isso, dentro do método, basta passar o nome da classe e pendurar seu valor numa variável que será usada dentro do controller (show(Request $request)). Também devemos importar o caminho dessa classe pra dentro do controller (use Illuminate\Http\Request;). Nesse caso, a classe Request nos dará acesso a todas as informações passadas na request, Quando injetarmos um model, teremos acesso ao dados que viram do banco de dados
+
+-Aplicando middleware no controller -> Para isso, devemos instanciar o método __construct() do php e dentro dele chamar o middleware ( __construct($this->middleware()) ). A partir disso, todos os métodos dentro desse controller passarão pelo middleware instanciado. Podemos escolher quais métodos usarão ou não o middleware, isso é possível com o método only() - only() aplicará o middleware apenas aos métodos que foram passados como parâmetro - e except() - except() aplicará o middleware a todos os métodos , exceto aos que foram passados como parâmetro. Também podemos passar um middleware através de um closure (é o mesmo closure que tem dentro do arquivo de middleware). Dessa forma, estamos criando o middleware apenas para esse controller, sem a necessidade de fazer o registro dentro do kernel.php. Esse caso é mais usado quando precisamos de um middleware muito específico, que só será usado em um controller e em nenhum outro lugar. Aceita os métodos only() e except() - $this->middleware(function(){})
+
+-Controller de ação única (Single Action Controller) -> Esse tipo de controller é utilizado para quando precisamos executar apenas uma ação. Ele é invocado automaticamente sem precisarmos passar o seu método para a rota (Route::get('checkout', CheckoutController::class);). Para criar esse tipo de controller usamos o comando php artisan make:controller NomeController --invokable. Dentro do controller de ação única, existe um método default que é o __invoke. Esse método é chamado automaticamente pela rota para invocar o controller 
+
+-Controller resource -> Para não precisarmos declarar as rotas de um CRUD manualmente, o laravel disponibiliza o controller resource, que trás consigo todos os métodos do CRUD por default. Para criar esse tipo de controller, temos que usar o comando php artisan make:controller NomeController --resource e para chamá-lo na rota, usamos o método resource e a classe do controller, sem a necessidade de especificar o método (Route::resource(uri, NomeController::class)). E o laravel vai além, se adicionarmos outra option ao comando make:controller, o laravel já faz a injeção do model nos métodos do controller - php artisan make:controller NomeController --resource --model=NomeModel
