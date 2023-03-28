@@ -1,6 +1,6 @@
 # Curso Full Stack LaraVue
 
-**## COMANDOS**
+** ## COMANDOS**
 -Verificar versão do laravel -> `php artisan --version`
 
 -Iniciar um servidor local -> `php artisan serve`
