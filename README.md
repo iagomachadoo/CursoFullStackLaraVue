@@ -1,6 +1,6 @@
-#Curso Full Stack LaraVue
+# Curso Full Stack LaraVue
 
-**##COMANDOS**
+**## COMANDOS**
 -Verificar versão do laravel -> `php artisan --version`
 
 -Iniciar um servidor local -> `php artisan serve`
@@ -19,7 +19,7 @@
 
 -Criar controller de ação única -> `php artisan make:controller NomeController --invokable`
 
-**##ESTRUTURA DE ARQUIVOS**
+**## ESTRUTURA DE ARQUIVOS**
 -composer.json -> lista as dependências instaladas no projeto
 
 -package.json -> lista de dependências para o front-end
@@ -34,15 +34,15 @@
 
 
 
-**##ROTAS**
+**## ROTAS**
 - O carregamentos das rotas (web/api) são feitos dentro de app/providers/RouteServiceProvider.php no método boot()
 
 - Estrutura de uma rota 
- - Route::get(uri, callback) 
-  - Route é uma classe
-  - get() é um verbo http
-  - uri é a url da rota
-  - callback é o retorno da rota que aceita uma função, array e string
+    - Route::get(uri, callback) 
+        - Route é uma classe
+        - get() é um verbo http
+        - uri é a url da rota
+        - callback é o retorno da rota que aceita uma função, array e string
 
 -Rotas nomeadas -> Route::get(uri, callback)->name('nomeRota') - O método name() atribui um nome para a rota. Na montagem de links na view, podemos ao invés de usar a url, apenas passar o nome da rota, deixando que o laravel vá atrás da rota com esse nome. Essa funcionalidade faz com que, caso mudemos a url da rota, na se altera, porque estamos referenciando a rota pelo seu nome 
 
@@ -64,7 +64,7 @@
 
 
 
-**##MIDDLEWARE**
+**## MIDDLEWARE**
 -Middleware -> os middleware agem como uma barreira entre a requisição e a aplicação, podendo ou não bloquear essa requisição. Um middleware nem sempre faz uma validação, podemos aplicar alguma rotina, como por exemplo, pegar o user agent do usuário. 
 
 -Criando e aplicando middleware -> Para criar um middleware usamos o comando artisan make:middleware, depois do arquivo criado, precisamos registrar esse novo middleware para que o laravel saiba de sua existência, o registro de middleware para rotas (esse caso é para quando iremos usar um middleware diretamente em uma rota com o método middleware()) fica dentro de app/http/kernel.php no atributo $middlewareAliases, já na rota, temos que concatenar o método middleware('NomeMiddleware') para que ele seja aplicado, mas esse formato demanda que passemos esse método middleware('NomeMiddleware') em todas as rotas ou grupo de rotas que queremos que ele seja aplicado. 
@@ -79,7 +79,7 @@
 
 
 
-**##CONTROLLER**
+**## CONTROLLER**
 -Um controller serve  para controlar a requisição do usuário, fazer o processamento necessário e ao final, devolver esses dados para o usuário
 
 -A convenção de nomenclatura para controllers é o uso do pascal case com a primeira palavra no singular seguido por controller (Ex: UserController)
