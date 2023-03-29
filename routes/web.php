@@ -259,3 +259,42 @@ Route::resources([
     'users8' => User2Controller::class,
     'posts2' => User2Controller::class
 ]);
+
+//Resource para api 
+//Quando usamos o apiResource, as rotas create e edit não são criadas
+Route::apiResource('users9', UserController::class);
+Route::apiResources([
+    'users10' => UserController::class,
+    'posts3' => UserController::class,
+]);
+
+//Aninhamento de resource (nested resource)
+//Usuário e comentário
+//users/{user}/comment - recupera todos os comentários de um usuário
+//users/{user}/comment/{comment} - recupera um comentário específico
+Route::resource('users11/{user}/comments', UserController::class);
+
+//Ao invés de criar esse padrão de rota, podemos passar users11.comments que teremos o mesmo resultado de users11/{user}/comments, mas agora com um código mais limpo 
+Route::resource('users12.comments', UserController::class);
+
+//Existem casos onde não precisamos do id do usuário para ter acesso a um comentário, apenas do id do comentário, caso ele seja único. Para essa situação, temos o método shallow() que separa as rotas em duas entidades: a entidade users/{user}/comments e comments/{comment}
+Route::resource('photos.comments', UserController::class)->shallow();
+
+//Renomeando rotas resource
+//Podemos renomear as rotas padrão criadas pelo resource com o método name()
+Route::resource('fotos', UserController::class)->names([
+    'create' => 'fotos.criar'
+]);
+
+//Renomeando parâmetros na rota resource
+//Para renomear um parâmetro da rota resource, podemos usar o método parameters()
+Route::resource('users13', UserController::class)->parameters([
+    'users13' => 'admin_user',
+    //'users13' => 'admin_user?',
+]);
+
+//Adicionando rotas extras em uma rota resource
+Route::resource('fotos2', UserController::class);
+
+//Essa nova rota será adicionada as rotas do resource, para isso, devemos passar a mesma url
+Route::get('fotos2/posts', [UserController::class, 'posts'])->name('fotos2.posts');

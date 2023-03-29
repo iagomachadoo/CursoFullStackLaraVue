@@ -28,6 +28,11 @@ class RouteServiceProvider extends ServiceProvider
         //Route::pattern('age', '[0-9]+');
         //Route::pattern('name', '[a-zA-Z]+');
 
+        //Localizando os métodos das rotas resource
+        Route::resourceVerbs([
+            'create' => 'criar',
+        ]);
+        
         $this->configureRateLimiting();
 
         $this->routes(function () {
