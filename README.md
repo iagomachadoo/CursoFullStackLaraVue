@@ -50,64 +50,64 @@
     - Na montagem de links na view, podemos ao invés de usar a url, apenas passar o nome da rota, deixando que o laravel vá atrás da rota com esse nome. 
     - Essa funcionalidade faz com que, caso mudemos a url da rota, nada se altera, porque estamos referenciando a rota pelo seu nome 
 
--Redirecionamento de rotas
+- Redirecionamento de rotas
     - Caso 1 - Sem o uso de lógica. 
         - Quando o usuário acessar uma rota ele será redirecionado para outra. Essa situação é interessante quando há a troca do endereço da rota. Nesse caso, devemos passar o parâmetro com o status do redirecionamento, esses status são os códigos **3xx**. O laravel disponibiliza o método **permanentRedirect()** que já trás o status internamente
     - Caso 2 - Quando é necessário aplicar alguma lógica. 
         - Dentro da rota origem, criamos a rota, a lógica e no final da rota damos um retorno com o helper global **redirect()**, passando para ele a rota destino. Mas a forma mais aconselhável de criar redirecionamentos é utilizando o nome da rota ao invés da url, para isso, deixamos de passar a url para o método redirect e concatenamos a ele outro helper global, o **route()** e então, dentro do **route()** passamos o nome da rota
 
--Rotas de visualização
+- Rotas de visualização
     - Esse caso é valido quando não precisamos passar por algum controller com as regras de negócio para no final mostrar uma view. O retorno da view é feito diretamente pela rota através do método **view()**. 
     - Também podemos passar variáveis para a view nesse caso, basta passar como terceiro parâmetro um array com os valores - `Route::view(url, view, ['chave' => 'valor'])`
 
--Rotas com parâmetro
+- Rotas com parâmetro
     - Caso 1 - Parâmetro obrigatório. 
         - Se o parâmetro não for passado, teremos um 404 - `Route::get('user/{id}', function($id){})`
     - Caso 2 - Parâmetro opcional. 
         - Com o parâmetro opcional, se o parâmetro não for passado, não teremos um 404 como retorno, pois indicamos ao laravel através da sintaxe **{par?}** que podemos ou não passá-lo. Mas o callback ainda fica esperando um valor para o parâmetro, então devemos inicializar ele com um valor padrão - **($par = null)** (esse valor padrão pode ser qualquer valor) - `Route::get('user/{id?}', function($id = valorDefault){})`. 
         - Podemos também passar mais de um parâmetro, tanto obrigatório como opcional (a ordem desses parâmetros importa) - `Route::get('user/{id?}/{nome?}', function($id = valorDefault, $nome = valorDefault){})`
 
--Validando o tipo do parâmetro
+- Validando o tipo do parâmetro
     - Para validarmos o parâmetro da rota, devemos utilizar o método **where()** passando para ele o parâmetro a ser validado e a expressão regular que limitará o formato do parâmetro (caso a rota tenha mais de um parâmetro, o método where aceita um array) - `Route::get(rota/{par})->where(['par', 'regex'])`. 
     - Mas o laravel já disponibiliza helpers que fazem essa validação implicitamente, como o **whereNumber()**, **whereAlpha()** e outros mais
     - Quando a validação de parâmetros se tornar repetitiva, o ideal é torná-la global, criando essas verificações dentro do arquivo **app/providers/RouteServiceProvider.php**, para isso, dentro do método **boot()** desse arquivo, devemos usar a classe `Route::pattern('par', 'regex')`, assim, todas as rotas que tiverem esse parâmetro, terão a validação
 
--Grupo de rotas
+- Grupo de rotas
     - PREFIXO - dá o prefixo na url - `Route::prefix()->group()`
     - NAME - dá o prefixo no nome da rota - `Route::name()->group()`
     - MIDDLEWARE - cria uma barreira para a requisição - `Route::middleware()->group()`
     - O arquivo **app/http/kernel.php** controla as camadas **web/api**. Dentro dele já existem middleware prefixados para essas camadas, ou seja, qualquer requisição para essas camadas já passam por esses middleware por default. Nesse arquivo também contém os middleware default das rotas **($middlewareAliases[])**
 
--Fallback
+- Fallback
     - funciona como um backup, caso ocorra algum erro no sistema. Ou seja, se não conseguirmos acessar uma rota listada no sistema o fallback entra em ação, então, ao invés de termos um erro 404, teremos o que foi passado no fallback - `Route::fallback(function(){})`
 
--Injeção de dependência
+- Injeção de dependência
     - Serve para injetarmos uma classe - `Route::get(uri, function(Classe $classe){})` 
 
--Injeção de model
+- Injeção de model
     - A injeção de model funciona da mesma forma que a de dependência, contudo, na de model estamos injetando um model - `Route::get(uri, function(Model $model){})` 
 
 
 
 ## MIDDLEWARE
--Middleware
+- Middleware
     - Os middleware agem como uma barreira entre a requisição e a aplicação, podendo ou não bloquear essa requisição. Um middleware nem sempre faz uma validação, podemos aplicar alguma rotina, como por exemplo, pegar o user agent do usuário. 
 
--Criando e aplicando middleware
+- Criando e aplicando middleware
     - Para criar um middleware usamos o comando `php artisan make:middleware`
     - Depois do arquivo criado, precisamos registrar esse novo middleware para que o laravel saiba de sua existência, o registro de middleware para rotas (esse caso é para quando iremos usar um middleware diretamente em uma rota com o método middleware()) fica dentro de **app/http/kernel.php** no atributo **$middlewareAliases**, já na rota, temos que concatenar o método `middleware('NomeMiddleware')` para que ele seja aplicado, mas esse formato demanda que passemos esse método middleware('NomeMiddleware') em todas as rotas ou grupo de rotas que queremos que ele seja aplicado. 
 
--Middleware global
+- Middleware global
     - Podemos declarar um middleware globalmente passando a classe do middleware para o atributo global **$middleware** dentro de **app/http/kernel.php** e a partir disso, todas as requisições passarão por esse middleware sem a necessidade de usarmos o método **middleware()**
 
--Grupo de middleware
+- Grupo de middleware
     - Quando estamos utilizando grupos de rotas passando mais de um middleware para as rotas, dependendo da quantidade de middleware, podemos deixar nosso grupo de rotas muito verboso, para minimizar isso, temos a possibilidade de criar um grupo de middleware.
     - Para criar esse grupo, devemos adicionar um novo grupo de middleware dentro do atributo **middlewareGroups[]** do arquivo **app/http/kernel.php**, aqui, a ordem do middleware dentro do grupo importa
 
--Definindo prioridade de middleware
+- Definindo prioridade de middleware
     - Podemos definir a ordem de aplicação dos middleware de forma global, ou seja, toda aplicação de middleware seguirá essa ordem - diretamente na rota, grupo de middleware e etc - para fazer isso, temos que criar o atributo público **$middlewarePriority** dentro do arquivo **app/http/kernel.php** e passar os middleware na ordem desejada
 
--Passando parâmetro para dentro do middleware
+- Passando parâmetro para dentro do middleware
     - Podemos passar parâmetros pra dentro de um middleware aplicado a uma rota, mas para que isso seja possível, o registro do middleware que vai receber o parâmetro, deve ser feito no atributo **$middlewareAliases**. 
     - A sintaxe para passar um parâmetro para o middleware é **middleware('nomeMiddleware:parâmetro')**. 
     - Dentro do middleware, no método **handle()**, passamos como 3º parâmetro uma variável que vai receber o valor passado para o middleware
