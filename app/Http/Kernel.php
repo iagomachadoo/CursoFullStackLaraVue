@@ -76,7 +76,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
 
-    //Definindo globalmente (toda forma de uso de middleware seguirá essa ordem) ordem de prioridade dos middleware
+    //Definindo ordem globalmente (toda forma de uso de middleware seguirá essa ordem) ordem de prioridade dos middleware
     public $middlewarePriority = [
         //\App\Http\Middleware\checkToken::class,
         //\App\Http\Middleware\UserAgent::class,

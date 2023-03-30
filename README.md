@@ -19,6 +19,11 @@
 
 - Criar controller de ação única -> `php artisan make:controller NomeController --invokable`
 
+- Listar rotas existentes -> `php artisan route:list` 
+    - `php artisan route:list -v` (mostra os middleware aplicado a cada rota)
+    - `php artisan route:list --path=users` (mostra apenas as rotas que começam com o path)
+    - `php artisan route:list --only-vendor` (mostra apenas as rotas definidas por pacotes de terceiros)
+
 ## ESTRUTURA DE ARQUIVOS
 - composer.json -> lista as dependências instaladas no projeto
 
@@ -44,48 +49,68 @@
         - uri é a url da rota
         - callback é o retorno da rota que aceita uma função, array e string
 
-- Rotas nomeadas
+- Métodos de roteamento disponíveis [doc](https://laravel.com/docs/10.x/routing#available-router-methods) 
+    - `Route::get($uri, $callback);`
+    - `Route::post($uri, $callback);`
+    - `Route::put($uri, $callback);`
+    - `Route::patch($uri, $callback);`
+    - `Route::delete($uri, $callback);`
+    - `Route::options($uri, $callback);`
+    - `Route::match([get, post, ...], $uri, $callback);` - o método match() faz com que a rota aceite os verbos que foram passados no array
+    - `Route::any($uri, $callback);` - o método any() faz com que a rota responda a todos os verbos existentes
+
+- Rotas nomeadas [doc](https://laravel.com/docs/10.x/routing#named-routes)
     - `Route::get(uri, callback)->name('nomeRota')`
     - O método **name()** atribui um nome para a rota. 
     - Na montagem de links na view, podemos ao invés de usar a url, apenas passar o nome da rota, deixando que o laravel vá atrás da rota com esse nome. 
     - Essa funcionalidade faz com que, caso mudemos a url da rota, nada se altera, porque estamos referenciando a rota pelo seu nome 
 
-- Redirecionamento de rotas
+- Redirecionamento de rotas [doc](https://laravel.com/docs/10.x/routing#redirect-routes)
     - Caso 1 - Sem o uso de lógica. 
         - Quando o usuário acessar uma rota ele será redirecionado para outra. Essa situação é interessante quando há a troca do endereço da rota. Nesse caso, devemos passar o parâmetro com o status do redirecionamento, esses status são os códigos **3xx**. O laravel disponibiliza o método **permanentRedirect()** que já trás o status internamente
     - Caso 2 - Quando é necessário aplicar alguma lógica. 
         - Dentro da rota origem, criamos a rota, a lógica e no final da rota damos um retorno com o helper global **redirect()**, passando para ele a rota destino. Mas a forma mais aconselhável de criar redirecionamentos é utilizando o nome da rota ao invés da url, para isso, deixamos de passar a url para o método redirect e concatenamos a ele outro helper global, o **route()** e então, dentro do **route()** passamos o nome da rota
 
-- Rotas de visualização
+- Rotas de visualização [doc](https://laravel.com/docs/10.x/routing#view-routes)
     - Esse caso é valido quando não precisamos passar por algum controller com as regras de negócio para no final mostrar uma view. O retorno da view é feito diretamente pela rota através do método **view()**. 
     - Também podemos passar variáveis para a view nesse caso, basta passar como terceiro parâmetro um array com os valores - `Route::view(url, view, ['chave' => 'valor'])`
 
-- Rotas com parâmetro
+- Rotas com parâmetro [doc](https://laravel.com/docs/10.x/routing#route-parameters)
     - Caso 1 - Parâmetro obrigatório. 
         - Se o parâmetro não for passado, teremos um 404 - `Route::get('user/{id}', function($id){})`
     - Caso 2 - Parâmetro opcional. 
         - Com o parâmetro opcional, se o parâmetro não for passado, não teremos um 404 como retorno, pois indicamos ao laravel através da sintaxe **{par?}** que podemos ou não passá-lo. Mas o callback ainda fica esperando um valor para o parâmetro, então devemos inicializar ele com um valor padrão - **($par = null)** (esse valor padrão pode ser qualquer valor) - `Route::get('user/{id?}', function($id = valorDefault){})`. 
         - Podemos também passar mais de um parâmetro, tanto obrigatório como opcional (a ordem desses parâmetros importa) - `Route::get('user/{id?}/{nome?}', function($id = valorDefault, $nome = valorDefault){})`
 
-- Validando o tipo do parâmetro
+- Validando o tipo do parâmetro [doc](https://laravel.com/docs/10.x/routing#parameters-regular-expression-constraints)
     - Para validarmos o parâmetro da rota, devemos utilizar o método **where()** passando para ele o parâmetro a ser validado e a expressão regular que limitará o formato do parâmetro (caso a rota tenha mais de um parâmetro, o método where aceita um array) - `Route::get(rota/{par})->where(['par', 'regex'])`. 
     - Mas o laravel já disponibiliza helpers que fazem essa validação implicitamente, como o **whereNumber()**, **whereAlpha()** e outros mais
     - Quando a validação de parâmetros se tornar repetitiva, o ideal é torná-la global, criando essas verificações dentro do arquivo **app/providers/RouteServiceProvider.php**, para isso, dentro do método **boot()** desse arquivo, devemos usar a classe `Route::pattern('par', 'regex')`, assim, todas as rotas que tiverem esse parâmetro, terão a validação
 
-- Grupo de rotas
-    - PREFIXO - dá o prefixo na url - `Route::prefix()->group()`
-    - NAME - dá o prefixo no nome da rota - `Route::name()->group()`
-    - MIDDLEWARE - cria uma barreira para a requisição - `Route::middleware()->group()`
+- Grupo de rotas [doc](https://laravel.com/docs/10.x/routing#route-groups)
+    - MIDDLEWARE - atribui middleware a todas as rotas do grupo - `Route::middleware()->group()`
+    - CONTROLLER - atribui um controller a todas as rotas do grupo - `Route::middleware()->group()`
+    - PREFIXO - atribui um prefixo de uri a todas as rotas do grupo - `Route::prefix()->group()`
+    - NAME - atribui um prefixo de nome a todas as rotas do grupo - `Route::name()->group()`
     - O arquivo **app/http/kernel.php** controla as camadas **web/api**. Dentro dele já existem middleware prefixados para essas camadas, ou seja, qualquer requisição para essas camadas já passam por esses middleware por default. Nesse arquivo também contém os middleware default das rotas **($middlewareAliases[])**
 
-- Fallback
-    - funciona como um backup, caso ocorra algum erro no sistema. Ou seja, se não conseguirmos acessar uma rota listada no sistema o fallback entra em ação, então, ao invés de termos um erro 404, teremos o que foi passado no fallback - `Route::fallback(function(){})`
+- Fallback [doc](https://laravel.com/docs/10.x/routing#fallback-routes)
+    - Podemos definir uma rota que será executada quando nenhuma outra rota corresponder à solicitação recebida, então, ao invés de termos um erro 404, teremos a rota que foi passado no fallback - `Route::fallback(function(){})`
+    - A rota de fallback deve ser sempre a última rota registrada pelo seu aplicativo.
 
-- Injeção de dependência
+- Injeção de dependência [doc](https://laravel.com/docs/10.x/routing#dependency-injection)
     - Serve para injetarmos uma classe - `Route::get(uri, function(Classe $classe){})` 
 
-- Injeção de model
+- Injeção de model - model binding [doc](https://laravel.com/docs/10.x/routing#route-model-binding)
     - A injeção de model funciona da mesma forma que a de dependência, contudo, na de model estamos injetando um model - `Route::get(uri, function(Model $model){})` 
+    - Contudo, o nome do parâmetro da rota e o do callback/controller devem ser o mesmo - `Route::get('/users/{user}', function (User $user) { return $user->email;});`
+    - Por default, o model binding faz a pesquisa pelo id, mas podemos personalizar em qual coluna a pesquisa será feita, passando o nome da coluna para o parâmetro da rota - `Route::get('/posts/{user:email}', function (User $user) {return $user;});` - agora na url, ao invés de ser passado o id, o email será passado para fazer a pesquisa
+
+- Falsificação de métodos para formulário [doc](https://laravel.com/docs/10.x/routing#form-method-spoofing)
+    - Por default, um formulário HTML não aceita os verbos **put**, **patch** e **delete**
+    - Então, para usarmos as rotas com esses verbos em formulários, precisamos passar no formulário um campo oculto com o **name="_method"** e **value="verboHttp"**
+    - Mas o laravel já nos disponibiliza uma diretiva blade que cria esse campo - diretiva **@method('verboHttp')**
+    - Nos formulários que apontam para os verbos **post**, **put**, **patch** e **delete** devem ter a proteção **CSRF**, caso contrário, o requisição será rejeitada - diretiva **@csrf** - [doc](https://laravel.com/docs/10.x/routing#csrf-protection)
 
 
 
@@ -189,3 +214,7 @@
         Route::get('fotos/posts', [UserController::class, 'posts'])->name(fotos.posts);
 
       ```
+
+
+## REQUEST
+*última aula assistida - 41. 415 CONTROLLERS Resource controllers - adicionando rotas extras
