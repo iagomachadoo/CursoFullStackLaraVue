@@ -115,24 +115,25 @@
 
 
 ## MIDDLEWARE
-- Middleware
-    - Os middleware agem como uma barreira entre a requisição e a aplicação, podendo ou não bloquear essa requisição. Um middleware nem sempre faz uma validação, podemos aplicar alguma rotina, como por exemplo, pegar o user agent do usuário. 
+- Middleware [doc](https://laravel.com/docs/10.x/middleware)
+    - Os middleware são um mecanismo para inspecionar e filtrar as solicitações Http. Eles agem como camadas que a solicitação Http deve passar antes de chegar na aplicação. Cada camada pode examinar a solicitação e até rejeitá-la totalmente. 
 
-- Criando e aplicando middleware
+- Criando e aplicando middleware [doc](https://laravel.com/docs/10.x/middleware#registering-middleware)
     - Para criar um middleware usamos o comando `php artisan make:middleware`
-    - Depois do arquivo criado, precisamos registrar esse novo middleware para que o laravel saiba de sua existência, o registro de middleware para rotas (esse caso é para quando iremos usar um middleware diretamente em uma rota com o método middleware()) fica dentro de **app/http/kernel.php** no atributo **$middlewareAliases**, já na rota, temos que concatenar o método `middleware('NomeMiddleware')` para que ele seja aplicado, mas esse formato demanda que passemos esse método middleware('NomeMiddleware') em todas as rotas ou grupo de rotas que queremos que ele seja aplicado. 
+    - Depois do arquivo criado, precisamos registrar esse novo middleware para que o laravel saiba de sua existência, o registro de middleware para rotas (esse caso é para quando iremos usar um middleware diretamente em uma rota com o método middleware()) fica dentro de **app/http/kernel.php** no atributo **$middlewareAliases** (esse tipo de registro serve para atribuirmos um alias ao middleware, ou seja, um nome, para que possamos referenciá-lo no método middleware() pelo seu nome e não pela sua classe), já na rota, temos que concatenar o método `middleware('NomeMiddleware')` para que ele seja aplicado, mas esse formato demanda que passemos esse método middleware('NomeMiddleware') em todas as rotas ou grupo de rotas que queremos que ele seja aplicado. 
+    - Podemos excluir a aplicação de um middleware para uma rota específica quando aplicado a um grupo de rotas, para isso, devemos usar o método **withoutMiddleware()** passando como parâmetro, os middleware que queremos que sejam excluídos. Podemos passar esse método diretamente ao grupo de rotas, se quisermos que todas as rotas do grupo não passem por determinados middelwares
 
-- Middleware global
+- Middleware global [doc](https://laravel.com/docs/10.x/middleware#global-middleware)
     - Podemos declarar um middleware globalmente passando a classe do middleware para o atributo global **$middleware** dentro de **app/http/kernel.php** e a partir disso, todas as requisições passarão por esse middleware sem a necessidade de usarmos o método **middleware()**
 
-- Grupo de middleware
-    - Quando estamos utilizando grupos de rotas passando mais de um middleware para as rotas, dependendo da quantidade de middleware, podemos deixar nosso grupo de rotas muito verboso, para minimizar isso, temos a possibilidade de criar um grupo de middleware.
+- Grupo de middleware [doc](https://laravel.com/docs/10.x/middleware#middleware-groups)
+    - Quando estamos utilizando grupos de rotas ou rotas individuais passando mais de um middleware para as rotas, dependendo da quantidade de middleware, podemos deixar nossas rotas muito verbosas, para minimizar isso, temos a possibilidade de criar um grupo de middleware.
     - Para criar esse grupo, devemos adicionar um novo grupo de middleware dentro do atributo **middlewareGroups[]** do arquivo **app/http/kernel.php**, aqui, a ordem do middleware dentro do grupo importa
 
-- Definindo prioridade de middleware
-    - Podemos definir a ordem de aplicação dos middleware de forma global, ou seja, toda aplicação de middleware seguirá essa ordem - diretamente na rota, grupo de middleware e etc - para fazer isso, temos que criar o atributo público **$middlewarePriority** dentro do arquivo **app/http/kernel.php** e passar os middleware na ordem desejada
+- Definindo prioridade de middleware [doc](https://laravel.com/docs/10.x/middleware#sorting-middleware)
+    - Podemos definir a ordem de aplicação dos middleware de forma global, ou seja, toda aplicação de middleware seguirá essa ordem. Para fazer isso, temos que criar o atributo público **$middlewarePriority** dentro do arquivo **app/http/kernel.php** e passar os middleware na ordem desejada
 
-- Passando parâmetro para dentro do middleware
+- Passando parâmetro para dentro do middleware [doc](https://laravel.com/docs/10.x/middleware#middleware-parameters)
     - Podemos passar parâmetros pra dentro de um middleware aplicado a uma rota, mas para que isso seja possível, o registro do middleware que vai receber o parâmetro, deve ser feito no atributo **$middlewareAliases**. 
     - A sintaxe para passar um parâmetro para o middleware é **middleware('nomeMiddleware:parâmetro')**. 
     - Dentro do middleware, no método **handle()**, passamos como 3º parâmetro uma variável que vai receber o valor passado para o middleware
