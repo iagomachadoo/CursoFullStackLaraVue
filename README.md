@@ -16,6 +16,10 @@
 - Criar um middleware -> `php artisan make:middleware NomeMiddleware`
 
 - Criar um controller -> `php artisan make:controller NomeController`
+    - `php artisan make:controller NomeController --resource` (cria um controller resource)
+    - `php artisan make:controller NomeController --model=NomeModel` (faz a injeção do model nas ações do controller)
+    - `php artisan make:controller NomeController --requests` (cria classes de validação request e já faz a injeção dessas classes nas ações do controlador)
+    - `php artisan make:controller NomeController --api` (cria um controller resource para api)
 
 - Criar controller de ação única -> `php artisan make:controller NomeController --invokable`
 
@@ -141,11 +145,11 @@
 
 
 ## CONTROLLER
-- Um controller serve  para controlar a requisição do usuário, fazer o processamento necessário e ao final, devolver esses dados para o usuário
+- Um controller serve para controlar a requisição do usuário, fazer o processamento necessário e ao final, devolver esses dados para o usuário
 
 - A convenção de nomenclatura para controllers é o uso do pascal case com a primeira palavra no singular seguido por controller (Ex: UserController)
 
-- Para ligar uma rota a um controller, devemos mudar um pouco a estrutura padrão da rota onde passamos uma função como segundo parâmetro (`Route::get(uri, function)`). Então, no lugar da função, devemos passar um array com a primeira posição sendo ocupada pelo controller e a segunda pelo método que iremos usar desse controller (`Route::get(uri, [NomeController::class, 'nomeMétodo'])`)
+- Para ligar uma rota a um controller, devemos mudar um pouco a estrutura padrão da rota onde passamos uma função como segundo parâmetro (`Route::get(uri, function)`). No lugar da função, devemos passar um array com a primeira posição sendo ocupada pela classe do controller e a segunda pelo método que iremos usar desse controller (`Route::get(uri, [NomeController::class, 'nomeMétodo'])`)
 
 - Passando parâmetros pro controller
     - Para passarmos um parâmetro vindo da rota pro controller, primeiro, nesse rota, devemos declarar o parâmetro (`rota/{parâmetro}`) para depois, no método do controller, declararmos esse parâmetro (`public function método($parâmetro)`). 
@@ -158,26 +162,28 @@
     - Nesse caso, a classe Request nos dará acesso a todas as informações passadas na request.
     - Quando injetarmos um model, teremos acesso ao dados que viram do banco de dados
 
-- Aplicando middleware no controller
+- Aplicando middleware no controller [doc](https://laravel.com/docs/10.x/controllers#controller-middleware)
     - Para isso, devemos instanciar o método **__construct()** do php e dentro dele chamar o middleware (`__construct($this->middleware())`)
-    - A partir disso, todos os métodos dentro desse controller passarão pelo middleware instanciado. 
+    - A partir disso, todos os métodos/ações dentro desse controller passarão pelo middleware instanciado. 
     - Podemos escolher quais métodos usarão ou não o middleware, isso é possível com o método **only()** - only() aplicará o middleware apenas aos métodos que foram passados como parâmetro - e **except()** - except() aplicará o middleware a todos os métodos , exceto aos que foram passados como parâmetro.
     - Também podemos passar um middleware através de um **closure** (é o mesmo closure que tem dentro do arquivo de middleware). Dessa forma, estamos criando o middleware apenas para esse controller, sem a necessidade de fazer o registro dentro do **kernel.php**. Esse caso é mais usado quando precisamos de um middleware muito específico, que só será usado em um controller e em nenhum outro lugar. Aceita os métodos only() e except() - `$this->middleware(function(){})`
 
-- Controller de ação única (Single Action Controller)
-    - Esse tipo de controller é utilizado para quando precisamos executar apenas uma ação. 
+- Controller de ação única (Single Action Controller) [doc](https://laravel.com/docs/10.x/controllers#single-action-controllers)
+    - Esse tipo de controller é utilizado para quando precisamos executar apenas uma ação ou quando essa ação é muito complexa. 
     - Ele é invocado automaticamente sem precisarmos passar o seu método para a rota (`Route::get('checkout', CheckoutController::class);`). 
     - Para criar esse tipo de controller usamos o comando `php artisan make:controller NomeController --invokable`. 
     - Dentro do controller de ação única, existe um método default que é o **__invoke**. 
     - Esse método é chamado automaticamente pela rota para invocar o controller 
 
-- Controller resource
-    - Para não precisarmos declarar as rotas de um CRUD manualmente, o laravel disponibiliza o controller resource, que trás consigo todos os métodos do CRUD por default. 
+- Controller resource [doc](https://laravel.com/docs/10.x/controllers#resource-controllers)
+    - Para não precisarmos declarar as rotas de um CRUD manualmente, o laravel disponibiliza o controller resource, que por default já é criado com todas a ações padrões de um CRUD. 
     - Para criar esse tipo de controller, temos que usar o comando `php artisan make:controller NomeController --resource`
     - Para chamá-lo na rota, usamos o método resource e a classe do controller, sem a necessidade de especificar o método (`Route::resource(uri, NomeController::class)`). 
-    - E o laravel vai além, se adicionarmos outra option ao comando make:controller, o laravel já faz a injeção do model nos métodos do controller - `php artisan make:controller NomeController --resource --model=NomeModel` 
+    - Utilizando o método resource na rota, o laravel já cria as rotas padrões de um CRUD em apenas uma linha de código
+    - E o laravel vai além, se adicionarmos o option **--model=NomeModel** ao comando make:controller, o laravel já faz a injeção do model nos métodos do controller - `php artisan make:controller NomeController --resource --model=NomeModel` 
+    - Podemos gerar classes de solicitação de formulário (Classes que farão a validação dos dados enviados em um formulário, esses arquivos serão criados dentro de **app/Http/Requests**) para os métodos de armazenamento e atualização do controlador, dessa forma, as ações de **store** e **update** já terão essas classes injetadas por default. Para isso, usamos o comando `php artisan make:controller NomeController --requests`
 
-- Personalizando os métodos do controller resource
+- Personalizando os métodos do controller resource [doc](https://laravel.com/docs/10.x/controllers#restful-partial-resource-routes)
     - Na rota, ao chamarmos o controller resource, o laravel já cria todas as rotas automaticamente, mas podemos indicar para ele, as rotas que queremos que sejam criadas, para isso, temos dois métodos - **only()** e **except()** - o método only() diz quais rotas queremos que sejam criadas, já o except, cria todas as rotas, menos as passadas como parâmetro
     - `Route::resource('users', UserController::class)->only(['index', 'store']);` apenas as rotas index e store serão criadas
     - `Route::resource('users', UserController::class)->except(['index', 'store']);` todas as rotas serão criadas, menos index e store
@@ -186,29 +192,41 @@
     - Quando temos mais de uma rota resource, para não precisarmos declarar cada uma, tornando o arquivo de rotas verboso, o laravel nos disponibiliza uma maneira de passar vários resources em apenas um método, ou invés de usarmos o **::resource**, utilizaremos o **::resources**
     - `Route::resources(['users' => UserController::class, 'posts' => PostsController::class])` - a desvantagem do método **resources**, é que ele não aceita os métodos only() e except() 
 
-- Utilizando resource para api
+- Utilizando resource para api [doc](https://laravel.com/docs/10.x/controllers#api-resource-routes)
     - `Route::apiResource('uri', Controller)` - único resource
     - `Route::apiResources(['uri' => Controller])` - múltiplos resources
     - Quando estamos trabalhando com api, podemos criar o método apiResource() que no geral, faz a mesma coisa que o resource comum, mas agora, as rotas que renderizam views (create e edit) não são criadas, apenas as de consumo e modificação de dados (index, store, show, update e delete)
     - O apiResource seria a mesma coisa que `Route::resource()->except('create', 'edit')`
 
-- Aninhamento de resource (nested resource)
+- Aninhamento de resource (nested resource) [doc](https://laravel.com/docs/10.x/controllers#restful-nested-resources)
     - Imagine um sistema onde temos usuários e seus comentários, a rota `/users/{users}/comments` irá retornar todos os comentários de um usuário específico 
     - Imagine também que queremos retornar um comentário específico, a rota seria `/users/{users}/comments/{comment}`. O resource desse caso seria `Route::resource('/users/{users}/comments', Controller)` e assim todas as rotas de listagem até a de excluir seriam criadas
-    - Mas temos uma alternativa mais limpa para a criação desse padrão de rotas, que seria `Route::resource('users.comments', Controller)` que nos daria o mesmo resultado do exemplo acima, mas agora com um código mais limpo
-    - Contudo, existem cenários onde queremos retornar um comentário específico, mas não precisamos do id do usuário, porque o próprio comentário tem seu id único (a rota seria algo como `comments/{comment}`) e para criar esse padrão dentro do resource, temos o método **shallow()** (`Route::resource('users.comments', Controller)->shallow()`) que resultará em duas entidades, termos as rotas **index**, **store** e **create** com o padrão `users/{user}/comments` e as rotas **show**, **update**, **destroy** e **edit** com o padrão `comments/{comment}`
+    - Mas temos uma alternativa mais limpa para a criação desse padrão de rotas, que seria o uso da notação de ponto (.) `Route::resource('users.comments', Controller)` que nos daria o mesmo resultado do exemplo acima, mas agora com um código mais limpo
+    - Aninhamento superficial [doc](https://laravel.com/docs/10.x/controllers#shallow-nesting)
+        - Contudo, existem cenários onde queremos retornar um comentário específico, mas não precisamos do id do usuário, porque o próprio comentário tem seu id único (a rota seria algo como `comments/{comment}`) e para criar esse padrão dentro do resource, temos o método **shallow()** (`Route::resource('users.comments', Controller)->shallow()`) que resultará em duas entidades, termos as rotas **index**, **store** e **create** com o padrão `users/{user}/comments` e as rotas **show**, **update**, **destroy** e **edit** com o padrão `comments/{comment}`
 
-- Renomeando rotas resource
-    - Quando usamos `Route::resource()` as rotas que são criadas já tem tem seus nomes definidos, mas se caso precisarmos modificar esses nomes, podemos usar o método **name()** 
-    - `Route::resource()->name(['create' => 'criar', 'update' => 'atualizar'])`
+- Renomeando rotas resource [doc](https://laravel.com/docs/10.x/controllers#restful-naming-resource-routes)
+    - Quando usamos `Route::resource()` as rotas que são criadas já tem tem seus nomes definidos, mas se caso precisarmos modificar esses nomes, podemos usar o método **names()** 
+    - `Route::resource()->names(['create' => 'criar', 'update' => 'atualizar'])`
 
-- Traduzindo rotas 
+- Renomeando parâmetros de rota resource [doc](https://laravel.com/docs/10.x/controllers#restful-naming-resource-route-parameters)
+    - Por padrão, a rota resource criará os parâmetros para as rotas **show**, **update**, **destroy** e **edit**, mas se caso quisermos mudar o nome desses parâmetros, podemos usar o método **parameters** que recebe um array associativo tento como chave o nome do parâmetro e o valor o novo nome do parâmetro
+    - ```
+        Route::resource('users', AdminUserController::class)->parameters([
+            'users' => 'admin_user'
+        ]);
+
+        /users/{admin_user}
+    ```
+
+- Traduzindo (localizando) rotas [doc](https://laravel.com/docs/10.x/controllers#restful-localizing-resource-uris) 
     - Podemos traduzir os métodos das rotas do resource, que por default vem em inglês 
     - Para isso, devemos criar uma configuração global no arquivo **app/providers/RouteServiceProvider.php** dentro do método **boot()**
     - No início do método **boot()** devemos declarar `Route::resourceVerbs(['create' => 'criar', 'update' => 'atualizar']);`
 
-- Adicionando rotas extras em uma rota resource
+- Adicionando rotas extras em uma rota resource [doc](https://laravel.com/docs/10.x/controllers#restful-supplementing-resource-controllers)
     - Podemos incluir mais rotas dentro da rota resource, basta apenas declararmos normalmente a rota que queremos, mas usando a mesma url da rota resource
+    - Devemos declarar as rotas complementares antes da resource, para não haver sobrescrita
     - A rota foto/posts será adicionada as rotas do resource fotos
     - ```
         Route::resource('fotos', UserController::class); 

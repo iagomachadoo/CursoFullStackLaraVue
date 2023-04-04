@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 
 class User2Controller extends Controller
 {
@@ -12,7 +13,7 @@ class User2Controller extends Controller
      */
     public function index()
     {
-        //dd('x');
+        //
     }
 
     /**
@@ -26,7 +27,7 @@ class User2Controller extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
         //
     }
@@ -50,7 +51,7 @@ class User2Controller extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
         //
     }

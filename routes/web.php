@@ -192,49 +192,50 @@ Route::options();
 //MIDDLEWARE
 //Usando middleware diretamente na rota
 //Podemos passar um array ao invés de uma string, nos casos onde queremos aplicar mais de um middleware
-Route::get('user8', function(){
-    return "Olá!";
-})->middleware('userAgent');
+// Route::get('user', function(){
+//     return "Olá!";
+// })->middleware('userAgent');
 
-//Usando um middleware global - o middleware agr está sendo aplicado em todas as requisições de forma global, para isso, o middleware foi registrado no atributo $middleware do arquivo app/http/kernel.php
-Route::get('user9', function(){
-    return "Olá!";
-});
+//Usando um middleware global - o middleware agora está sendo aplicado em todas as requisições de forma global, para isso, o middleware foi registrado no atributo $middleware do arquivo app/http/kernel.php
+// Route::get('user', function(){
+//     return "Olá!";
+// });
 
 //Aplicando middleware no grupo de rotas
 //Podemos aplicar mais de um middleware nas rotas, passando ao invés de uma string, um array com todos os middleware que queremos aplicar. A ordem em que esses middleware serão aplicados depende de sua posição dentro do array. Nesse caso abaixo, o primeiro a ser aplicado será o checkToken
-Route::middleware(['checkToken', 'userAgent'])->group(function(){
-    Route::get('user10', function(){
-        return "User";
-    });
+// Route::middleware(['checkToken', 'userAgent'])->group(function(){
+//     Route::get('user', function(){
+//         return "User";
+//     });
     
-    Route::get('posts', function(){
-        return "Posts";
-    });
+//     Route::get('posts', function(){
+//         return "Posts";
+//     });
     
-    //Removendo uma rota da aplicação da regra do middleware dentro de um grupo de rotas
-    Route::get('services', function(){
-        return "Services";
-    })->withoutMiddleware('userAgent');
-});
+//     //Removendo uma rota da aplicação da regra do middleware dentro de um grupo de rotas
+//     Route::get('services', function(){
+//         return "Services";
+//     })->withoutMiddleware('userAgent');
+// });
 
-//Podemos ao invés de passar todos os middleware num array, podendo deixar muito verboso, criar um grupo de middleware e passá-lo para a rota. Esse grupo deve ser criado dentro do atributo $middlewareGroups do arquivo app/http/kernel.php
-Route::middleware('myApp')->group(function(){
-    Route::get('user11', function(){
-        return "User";
-    });
+//Podemos ao invés de passar todos os middlewares num array, criar um grupo de middlewares e passá-lo para a rota. 
+//Esse grupo deve ser criado dentro do atributo $middlewareGroups do arquivo app/http/kernel.php
+// Route::middleware('myApp')->group(function(){
+//     Route::get('user', function(){
+//         return "User";
+//     });
     
-    Route::get('posts1', function(){
-        return "Posts";
-    });
+//     Route::get('posts', function(){
+//         return "Posts";
+//     });
     
-    Route::get('services2', function(){
-        return "Services";
-    });
-});
+//     Route::get('services', function(){
+//         return "Services";
+//     });
+// });
 
 //Passando parâmetro para a middleware
-//Podemos passar parâmetros pra dentro de uma middleware aplicado a uma rota, mas para que isso seja possível, o registro do middleware que vai receber o parâmetro, deve ser feito no atributo $middlewareAliases. A sintaxe para passar um parâmetro para o middleware é middleware('nomeMiddleware:parâmetro')
+//Podemos passar parâmetros pra dentro de um middleware aplicado a uma rota, mas para que isso seja possível, o registro do middleware que vai receber o parâmetro, deve ser feito no atributo $middlewareAliases. A sintaxe para passar um parâmetro para o middleware é middleware('nomeMiddleware:parâmetro')
 //Dentro do middleware, no método handle, passamos como 3º parâmetro uma variável que vai receber o valor passado para o middleware
 // Route::get('admin', function(){
 //     return "Admin";
@@ -243,75 +244,75 @@ Route::middleware('myApp')->group(function(){
 //CONTROLLER
 //Ligando um controller a uma rota
 //Nova estrutura da rota - (uri, [controller, métodoDoController])
-Route::get('users3', [UserController::class, 'index'])->name('users.index');
+//Route::get('users', [UserController::class, 'index'])->name('users.index');
 
 //Passando parâmetro pro controller
-Route::get('users3/{id}', [UserController::class, 'show'])->name('user.show');
+//Route::get('users/{id}', [UserController::class, 'show'])->name('user.show');
 
 //Model bilnding
-Route::get('users4/{user}', [UserController::class, 'show2'])->name('user.show2');
+//Route::get('users/{user}', [UserController::class, 'show2'])->name('user.show2');
 
 //Controller de ação única
 //Essa rota invoca automaticamente o controller através da sua classe, porque o controller tem o método __invoke
-Route::get('checkout/{token}', CheckoutController::class);
+//Route::get('checkout/{token}', CheckoutController::class);
 
 //Controller resource
 //O método resource é utilizado para chamar um controller de CRUD
 //Para criar esse controller, devemos usar a option --resource no comando make
 //Quando criamos um controller dessa maneira, ele já vem por default com todos os métodos do CRUD criados
 //Podemos adicionar outra option a esse comando, --model=NomeModel para o controller já vir com o model binding feito
-Route::resource('users5', User2Controller::class);
+// Route::resource('users', User2Controller::class);
 
 //Personalizando o resource
 //Método only() - cria apenas as rotas para os métodos passados como parâmetro
-Route::resource('users6', User2Controller::class)->only(['index', 'edit']);
+// Route::resource('users', User2Controller::class)->only(['index', 'edit']);
 
 //Método except() - cria todas as rotas, menos as para os métodos passados como parâmetro
-Route::resource('users7', User2Controller::class)->except(['index', 'edit']);
+// Route::resource('users', User2Controller::class)->except(['index', 'edit']);
 
 //Mais de um resource
 //Utilizamos o método resources ao invés de resource
 //Passamos as uri e classes dentro de um array associativo
-Route::resources([
-    'users8' => User2Controller::class,
-    'posts2' => User2Controller::class
-]);
+// Route::resources([
+//     'users' => User2Controller::class,
+//     'posts' => User2Controller::class
+// ]);
 
 //Resource para api 
 //Quando usamos o apiResource, as rotas create e edit não são criadas
-Route::apiResource('users9', UserController::class);
-Route::apiResources([
-    'users10' => UserController::class,
-    'posts3' => UserController::class,
-]);
+// Route::apiResource('users', UserController::class);
+// Route::apiResources([
+//     'users' => UserController::class,
+//     'posts' => UserController::class,
+// ]);
 
 //Aninhamento de resource (nested resource)
 //Usuário e comentário
 //users/{user}/comment - recupera todos os comentários de um usuário
 //users/{user}/comment/{comment} - recupera um comentário específico
-Route::resource('users11/{user}/comments', UserController::class);
+// Route::resource('users/{user}/comments', UserController::class);
 
-//Ao invés de criar esse padrão de rota, podemos passar users11.comments que teremos o mesmo resultado de users11/{user}/comments, mas agora com um código mais limpo 
-Route::resource('users12.comments', UserController::class);
+//Ao invés de criar esse padrão de rota, podemos passar users.comments que teremos o mesmo resultado de users/{user}/comments, mas agora com um código mais limpo 
+// Route::resource('users.comments', UserController::class);
 
 //Existem casos onde não precisamos do id do usuário para ter acesso a um comentário, apenas do id do comentário, caso ele seja único. Para essa situação, temos o método shallow() que separa as rotas em duas entidades: a entidade users/{user}/comments e comments/{comment}
-Route::resource('photos.comments', UserController::class)->shallow();
+// Route::resource('users.comments', UserController::class)->shallow();
 
 //Renomeando rotas resource
 //Podemos renomear as rotas padrão criadas pelo resource com o método name()
-Route::resource('fotos', UserController::class)->names([
-    'create' => 'fotos.criar'
-]);
+// Route::resource('fotos', UserController::class)->names([
+//     'create' => 'fotos.criar'
+// ]);
 
 //Renomeando parâmetros na rota resource
 //Para renomear um parâmetro da rota resource, podemos usar o método parameters()
-Route::resource('users13', UserController::class)->parameters([
-    'users13' => 'admin_user',
-    //'users13' => 'admin_user?',
-]);
+// Route::resource('users', UserController::class)->parameters([
+//     'users' => 'admin_user',
+//     //'users' => 'admin_user?',
+// ]);
 
 //Adicionando rotas extras em uma rota resource
-Route::resource('fotos2', UserController::class);
+// Route::resource('fotos', UserController::class);
 
 //Essa nova rota será adicionada as rotas do resource, para isso, devemos passar a mesma url
-Route::get('fotos2/posts', [UserController::class, 'posts'])->name('fotos2.posts');
+// Route::get('fotos/posts', [UserController::class, 'posts'])->name('fotos.posts');
