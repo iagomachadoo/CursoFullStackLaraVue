@@ -211,13 +211,13 @@
 
 - Renomeando parâmetros de rota resource [doc](https://laravel.com/docs/10.x/controllers#restful-naming-resource-route-parameters)
     - Por padrão, a rota resource criará os parâmetros para as rotas **show**, **update**, **destroy** e **edit**, mas se caso quisermos mudar o nome desses parâmetros, podemos usar o método **parameters** que recebe um array associativo tento como chave o nome do parâmetro e o valor o novo nome do parâmetro
-    - ```
+    -   ```
         Route::resource('users', AdminUserController::class)->parameters([
             'users' => 'admin_user'
         ]);
 
         /users/{admin_user}
-     ```
+        ```
 
 - Traduzindo (localizando) rotas [doc](https://laravel.com/docs/10.x/controllers#restful-localizing-resource-uris) 
     - Podemos traduzir os métodos das rotas do resource, que por default vem em inglês 
