@@ -217,7 +217,7 @@
         ]);
 
         /users/{admin_user}
-    ```
+     ```
 
 - Traduzindo (localizando) rotas [doc](https://laravel.com/docs/10.x/controllers#restful-localizing-resource-uris) 
     - Podemos traduzir os métodos das rotas do resource, que por default vem em inglês 
