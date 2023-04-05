@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 
 /*
 |--------------------------------------------------------------------------
@@ -352,7 +353,7 @@ Route::options();
 // })->name('user');
 
 //Fazendo checagem nos inputs
-Route::get('user', function(Request $request){
+// Route::get('user', function(Request $request){
     // if($request->has('token')){
     //     dd('Token existe');  
     // } //O método has() verifica se o campo passado como parâmetro existe, retornando true ou false
@@ -381,4 +382,28 @@ Route::get('user', function(Request $request){
     //     dd('O campo token está faltando');
     // } // O método missing() verifica se o campo passado como parâmetro não está na request,
 
-})->name('user');
+// })->name('user');
+
+//Trabalhando com views
+// Route::get('/', function(){
+//     return view('welcome2'); // Sintaxe padrão usando o helper global view
+//     // return View::make('welcome2'); //Sintaxe utilizando a classe View
+// });
+
+//Acessando uma view em um subdiretorio
+//Para acessar uma view em um subdiretório, usamos a notação de ponto
+// Route::get('/user', function(){
+//     return view('user.profile');
+// });
+
+//Renderizando a primeira view que encontrar
+// Route::get('/user', function(){
+//     return View::first(['user.profile', 'user.profile_new']); //Vai renderizar 'user.profile'
+//     // return View::first(['user.profile2', 'user.profile_new']); //Vai renderizar 'user.profile_new'
+// });
+
+//Verificando se uma view existe
+Route::get('/user', function(){
+    dd(View::exists('user.profile'));// O método exists verifica se uma view existe e retorna true ou false
+});
+

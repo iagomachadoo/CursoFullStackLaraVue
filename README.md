@@ -260,3 +260,4 @@
 
 
 ## VIEWS
+* última aula assistida - 45. 6 VIEWS Criando a primeira view
