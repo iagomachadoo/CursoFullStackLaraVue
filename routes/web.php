@@ -316,3 +316,69 @@ Route::options();
 
 //Essa nova rota será adicionada as rotas do resource, para isso, devemos passar a mesma url
 // Route::get('fotos/posts', [UserController::class, 'posts'])->name('fotos.posts');
+
+//Trabalhando com Request
+// Route::get('user', function(Request $request){
+    // dd($request);
+    // dd($request->path()); // Retorna o caminho da url sem o hostname
+    // dd($request->url()); // Retorna toda a url, mas sem as query string, caso existam
+    // dd($request->fullUrl()); // Retorna toda a url e as query strings
+    // dd($request->fullUrlWithQuery(['curso' => 'Laravel'])); // Adiciona os parâmetros passados a url e retorna a nova url com os novos parâmetros
+    // dd($request->fullUrlIs("http://127.0.0.1:8000/user" )); // Compara a string passada como parâmetro com a full url retornando true ou false
+    // dd($request->is("user")); // Compara a string passada como parâmetro com a request retornando true ou false. Caso a request tenha parâmetros, basta usarmos /* para indicar que é uma variável - $request->is("user/*")
+    // dd($request->routeIs("user")); // Compara a string passada como parâmetro com o nome da rota, retornando true ou false
+    // dd($request->method()); // Retorna o tipo de método da requisição
+    // dd($request->isMethod('get')); // Compara o parâmetro passado com o método da requisição e retorna true ou false
+
+// })->name('user');
+
+//Capturando dados de input do usuário
+// Route::get('user', function(Request $request){
+    // dd($request);
+    // dd($request->input()); //O método input sem parâmetro captura todos os campos da requisição (query string e post)
+    // dd($request->input('token')); // Retorna o valor da query string (mesma aplicação pro método POST) passada como parâmetro
+    // dd($request->input('curso', 'Laravel')); // Podemos passar um valor padrão como segundo parâmetro, para evitar erros se caso um campo vier vazio - null -
+    // dd($request->input('products.curso')); // Retorna o valor de um campo array buscando pela chave (Ex: products[curso])
+    // dd($request->input('products.*')); // Retorna todos valores de um campo array com um index numérico (Ex: products[])
+    
+    // dd($request->query()); //Retorna apenas as query string (não pegar o post)
+    // dd($request->query('products')); //Retorna a query string passada como parâmetro
+    // dd($request->query('city', 'São Paulo')); //Podemos passar um valor padrão como segundo parâmetro, para evitar erros se caso um campo vier vazio - null - 
+
+    // dd($request->token); //Podemos passar diretamente a chave do campo que o laravel retorna seu valor
+    // dd($request->only('token')); //Retorna o valor apenas do campo passado como parâmetro
+    // dd($request->except('token')); //Retorna todos os valor menos o do campo passado como parâmetro
+
+// })->name('user');
+
+//Fazendo checagem nos inputs
+Route::get('user', function(Request $request){
+    // if($request->has('token')){
+    //     dd('Token existe');  
+    // } //O método has() verifica se o campo passado como parâmetro existe, retornando true ou false
+    
+    // if($request->has(['token', 'curso'])){
+    //     dd('Token e curso existem');  
+    // } //O método has() verifica se o campo passado como parâmetro existe, retornando true ou false. Podemos passar um array e verificar todos os campos passados nesse array, contudo, só retornará true caso todos os campos existam (funciona igual ao operador lógico &&)
+
+    // $request->whenHas('token', function($input){
+    //     dd('O valor do token é ' . $input);  
+    // }); //O método whenHas() verifica se o campo existe e se caso exista, executa um closure (função)
+
+    // if($request->hasAny(['token', 'curso'])){
+    //     dd('Token ou curso existe');  
+    // } //O método hasAny() verifica se o campo passado como parâmetro existe, retornando true ou false. Podemos passar um array e verificar todos os campos passados nesse array e retornará true caso pelo menos um desses campos exista (funciona igual ao operador lógico ||)
+
+    // if($request->filled(['curso'])){
+    //     dd('Curso não é vazio');  
+    // } //O método filled() verificar se um campo não é vazio (funciona igual ao empty do php)
+
+    // $request->whenFilled('curso', function($input){
+    //     dd('O nome do curso é ' . $input);  
+    // }); //O método whenFilled() verifica se o campo não é vazio e executa um closure (função)
+
+    // if($request->missing('token')){
+    //     dd('O campo token está faltando');
+    // } // O método missing() verifica se o campo passado como parâmetro não está na request,
+
+})->name('user');

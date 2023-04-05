@@ -235,5 +235,28 @@
       ```
 
 
+
 ## REQUEST
-*última aula assistida - 41. 415 CONTROLLERS Resource controllers - adicionando rotas extras
+- A classe do Laravel **Illuminate\Http\Request** fornece uma maneira orientada a objetos para interagir com a **solicitação HTTP atual** que está sendo tratada pelo seu aplicativo, bem como recuperar a entrada, os cookies e os arquivos que foram enviados com a solicitação.
+
+- Para obtermos uma instância da solicitação Http, devemos injetar a classe Request como parâmetro do callback da rota ou na ação de um controller [doc](https://laravel.com/docs/10.x/requests#accessing-the-request)
+    - ```
+            use Illuminate\Http\Request;
+
+            Route::get(uri, callback(Request $request)){} - aplicado na rota
+
+            public function store(Request $request){} - aplicado na ação de um controller
+      ```
+
+    - Quando uma rota estiver esperando um parâmetro, devemos listar os parâmetros após a injeção de dependência
+        - ```
+                use Illuminate\Http\Request;
+
+                public function store(Request $request, $id){} - aplicado na ação de um controller
+          ```
+
+- Através da classe Request, podemos recuperar os valores de entrada de uma requisição com uma série de métodos [doc](https://laravel.com/docs/10.x/requests#retrieving-input)
+
+
+
+## VIEWS
