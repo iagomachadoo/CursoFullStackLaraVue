@@ -282,7 +282,7 @@
       ```
 
 - A sintaxe padrão do helper **view()** é o primeiro parâmetro sendo o nome do arquivo de exibição e o segundo, um array de variáveis que serão usadas na view
-    - - ```
+    - ```
             use Illuminate\Support\Facades\View;
  
             return View::make('greeting', ['name' => 'James']);
