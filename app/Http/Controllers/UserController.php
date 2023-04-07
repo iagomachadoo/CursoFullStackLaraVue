@@ -31,7 +31,41 @@ class UserController extends Controller
     //Por convenção, a função que lista todos os dados (função inicial) recebe o nome de index
     public function index()
     {
-        dd('x');
+        //Passando variáveis pra view - array associativo
+        // return view('user.index', [
+        //     'user' => 'Jhon Snow',
+        // ]);
+
+        //Passando variáveis pra view - método with
+        // return view('user.index')->with([
+        //     'user' => 'Jhon Snow',
+        // ]);
+
+        //Ao user o with() podemos aplicar lógica juntamente a renderização de views
+        // $view = view('user.index');
+
+        //Lógica 1 - if e else
+        // $view->with(['user' => 'Jhon Snow']);
+
+        //Lógica 2 - if e else
+        // $view->with(['user2' => 'Arya Stark']);
+
+        //Final da lógica
+        // return $view;
+
+        //Passando dados para todas a views de forma global
+        //Para isso, devemos usar o Facades/Views como o método share() passando um array associativo com a chave e o valor da variável. Isso deve ser feito dentro do arquivo app/providers/AppServiceProvider.php. Mas isso deve ser feito com cuidado
+
+        //Passando dados do bd para view
+        // $users = User::all();
+        
+        // return view('user.index', [
+        //     'users' => $users,
+        // ]);
+
+        //Passando variáveis com compact
+        // return view('user.index', compact('users'));
+
     }
 
     //Passando parâmetro pro controller e injetando dependência

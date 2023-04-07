@@ -260,4 +260,37 @@
 
 
 ## VIEWS
-* última aula assistida - 45. 6 VIEWS Criando a primeira view
+- Os arquivos de view ficam armazenados dentro do diretório **resource/views** e levam a extensão **.blade.php** para poderem usar a engenharia de template blade
+
+- Para acessarmos arquivos de view dentro de subdiretórios, devemos utilizar a notação de ponto **view('users.profile')** - a view **profile** está dentro de **views/user**
+
+- Para exibir uma view, devemos usar o helper global **view()**. 
+    - ```
+            Route::get('/', function () {
+                return view('greeting', ['name' => 'James']);
+            });
+      ```
+
+- Para exibir uma view podemos também utilizar a **classe View** que é importada do Facades 
+    - Utilizando a classe **View** temos acesso a métodos que o helper **view()** não disponibiliza.
+    - A classe View nós dá por exemplo, os métodos **View::first()** (Renderiza a primeira view existente em um array de views) e **View::exists()** (Verifica se uma view existe) e muitos mais
+
+    - ```
+            use Illuminate\Support\Facades\View;
+ 
+            return View::make('greeting', ['name' => 'James']);
+      ```
+
+- A sintaxe padrão do helper **view()** é o primeiro parâmetro sendo o nome do arquivo de exibição e o segundo, um array de variáveis que serão usadas na view
+    - - ```
+            use Illuminate\Support\Facades\View;
+ 
+            return View::make('greeting', ['name' => 'James']);
+      ```
+
+- Passando dados para a view
+    - Podemos passar dados pra uma view, passando como segundo parâmetro do helper view() um array associativo, sendo a chave o nome da variável e o valor, o valor da variável **return view('greetings', ['name' => 'Victoria']);**
+
+    - Podemos também encadear o método **with()** que nos possibilita encadear novos métodos antes de retornar a view **return view('greeting')->with(['name', 'Victoria']);** 
+
+*Última aula assistida - 49. 64 VIEWS Passando dados do banco de dados (spoiler)

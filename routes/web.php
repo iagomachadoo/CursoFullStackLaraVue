@@ -403,7 +403,9 @@ Route::options();
 // });
 
 //Verificando se uma view existe
-Route::get('/user', function(){
-    dd(View::exists('user.profile'));// O método exists verifica se uma view existe e retorna true ou false
-});
+// Route::get('/user', function(){
+//     dd(View::exists('user.profile'));// O método exists verifica se uma view existe e retorna true ou false
+// });
 
+//Usando view no controller
+// Route::get('/users', [UserController::class, 'index'])->name('users.index');
