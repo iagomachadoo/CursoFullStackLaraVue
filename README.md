@@ -293,4 +293,7 @@
 
     - Podemos também encadear o método **with()** que nos possibilita encadear novos métodos antes de retornar a view **return view('greeting')->with(['name', 'Victoria']);** 
 
-*Última aula assistida - 49. 64 VIEWS Passando dados do banco de dados (spoiler)
+
+
+## Blade Template
+*Última aula assistida - 56. 76 BLADE TEMPLATE Incluindo subviews

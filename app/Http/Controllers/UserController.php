@@ -57,14 +57,16 @@ class UserController extends Controller
         //Para isso, devemos usar o Facades/Views como o método share() passando um array associativo com a chave e o valor da variável. Isso deve ser feito dentro do arquivo app/providers/AppServiceProvider.php. Mas isso deve ser feito com cuidado
 
         //Passando dados do bd para view
-        // $users = User::all();
-        
+        $users = User::all();
+        $quant = count($users);
         // return view('user.index', [
         //     'users' => $users,
         // ]);
 
         //Passando variáveis com compact
         // return view('user.index', compact('users'));
+
+        return view('user.index', compact('users', 'quant'));
 
     }
 
