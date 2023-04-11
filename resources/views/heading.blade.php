@@ -11,10 +11,10 @@
     }   
 </style>
 <header>
-    <h1>Usuários</h1>
+    <h1>{{$title}}</h1>
     <nav>
-        <a href="home">home</a>
-        <a href="sobre">sobre</a>
-        <a href="contato">contato</a>
+        <a href="#">home</a>
+        <a href="#">sobre</a>
+        <a href="#">contato</a>
     </nav>
-</header>
+</header>  

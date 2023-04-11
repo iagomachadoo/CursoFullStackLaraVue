@@ -296,4 +296,64 @@
 
 
 ## Blade Template
-*Última aula assistida - 56. 76 BLADE TEMPLATE Incluindo subviews
+- Blade é o mecanismo de modelagem de views incluído no laravel.
+
+- Os arquivos blade usam a extensão **.blade.php** e ficam armazenados dentro da pasta **resources/views**
+
+- A exibição de um modelo blade pode ser retorno de rotas e controladores através do helper global **view()**
+
+- Para exibirmos dados dentro de um modelo blade, devemos usar a sintaxe **{{$nomeVar}}** (essa sintaxe blade usa internamente a função **htmlspecialchars** do php para evitar ataques XSS). E não estamos limitados a exibição de variáveis que foram passadas para a exibição, podemos ecoar qualquer função/código php dentro dessa sintaxe
+
+- Temos a opção de renderizar o conteúdo sem escape html (não passa pela função htmlspecialchars) utilizando a sintaxe **{!! !!}**, mas devemos ter cuidado com essa opção, pois com ela estamos sujeitos a ataques XSS
+
+- O blade template nos disponibiliza atalhos para as estruturas de controle PHP comuns, como instruções condicionais e de loop.
+    - Sintaxe comum de uma diretiva - **@NomeDiretiva @endNomeDiretiva**
+
+    - Alguns exemplos de diretivas
+        - @if e @elseif
+        - @unless
+        - @isset
+        - @empty
+        - @auth
+        - @switch
+        - @foreach
+
+- Podemos incluir uma visualização blade dentro de outra através da diretiva **@include(nomeView)**
+    - A view que for incluída através do @include herdará todas as variáveis existente na view pai
+
+    - Podemos passar variáveis para a view incluída, passando um segundo parâmetro para a diretiva @include, esse segundo parâmetro é um array associativo contendo o nome da variável e seu valor
+        - `@include('view.name', ['status' => 'complete'])`
+
+    - Temos algumas variações da diretiva @include
+        - **@includeIf()** - Verifica se a view passada existe, caso ela exista, a renderização é feita, mas caso não exista, nada acontece e não temos um erro como retorno
+
+        - **@includeWhen()** - Como primeiro parâmetro passamos uma expressão booleana. Dessa forma, a view só será renderizada caso essa expressão seja true
+
+        - **@includeUnless()** - Como primeiro parâmetro passamos uma expressão booleana. Dessa forma, a view só será renderizada caso essa expressão seja false
+
+        - **@includeFirst** - Recebe como parâmetro um array de views e fará a renderização da primeira view que existir
+
+    - Podemos utilizar o @include juntamente com loops e o laravel nos disponibiliza a diretiva **@each()** onde criamos um loop apenas com uma linha de código
+        - Visualizações renderizadas via @each não herdam as variáveis ​​da visualização pai
+
+        - 1º parâmetro - a view que será renderizada
+
+        - 2º parâmetro - é a coleção sobre a qual teremos a iteração
+
+        - 3º parâmetro - é a variável que receberá o resultado de cada iteração
+
+        - `@each('view.name', $jobs, 'job')`  
+
+        - Podemos passar um quarto parâmetro pra diretiva @each, que será a view a ser renderizada caso a coleção estiver vazia
+            - `@each('view.name', $jobs, 'job', 'view.empty')` 
+
+- Layouts usando herança de modelo
+    - Várias páginas dentro de um app usam a mesma estrutura, como o header e o footer, além da estrutura padrão html. Para evitar a repetição dessas estruturas em todas a views, podemos usar a herança de modelo
+
+    - Criamos um arquivo que terá a estrutura padrão do layout e nos demais arquivos que usaram essa estrutura, devemos declarar a diretiva **@extends()** passando o caminho do arquivo com a estrutura padrão. Essa diretiva estender o layout padrão para as demais views
+
+    - Podemos injetar conteúdo dentro do layout padrão de algumas formas
+        - Com o **@section**
+            - A diretiva **@section** dentro do layout padrão, serve para injetarmos 
+
+        - Com o **@yeld**  
