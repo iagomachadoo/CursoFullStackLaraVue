@@ -354,6 +354,48 @@
 
     - Podemos injetar conteúdo dentro do layout padrão de algumas formas
         - Com o **@section**
-            - A diretiva **@section** dentro do layout padrão, serve para injetarmos 
+            - A diretiva **@section** dentro do layout padrão, serve para criarmos uma sessão dentro do layout que receberá o conteúdo das páginas que estão usando esse template. Para que possamos injetar conteúdo nessa section, ela deve terminar com **@show** ou invés de **@endsection**
+
+            - Quando utilizamos **@section @show** podemos criar blocos html dentro dessa sessão com uma estrutura padrão, e nas views que usaram esse template, podemo herdar essa estrutura padrão com a diretiva **@parent**
+
+            - E além de herdar a estrutura padrão da section, podemos adicionar mais conteúdo 
+
+            - ```
+                - Template
+                @section('sidbar')
+                    <ul>
+                        <li>Menu principal 1</li>
+                        <li>Menu principal 2</li>
+                        <li>Menu principal 3</li>
+                    </ul>
+                @show
+
+                - Views
+                @section('sidbar')
+                    @parent
+                    <ul>
+                        <li>Menu secundáio 1</li>
+                        <li>Menu secundáio 2</li>
+                        <li>Menu secundáio 3</li>
+                    </ul>
+                @endsection
+              ```
 
         - Com o **@yeld**  
+            - A diretiva **@yeld** renderiza conteúdo da mesma forma que a **@section**, mas existem algumas diferenças entre as duas
+
+            - O **@yeld** não aceita que criemos um bloco html dentro dele que servirá como conteúdo padrão, mas podemos passar como segundo parâmetro uma string que servirá como valor padrão
+
+            - Não conseguimos usar o valor padrão do **@yeld** e acrescentar mais, se injetarmos conteúdo no **@yeld** será o conteúdo a ser renderizado
+
+            - O **@yeld** é utilizado para injetarmos conteúdo que mudará em toda view, ou seja, o conteúdo principal, já o **@section** serve para injetarmos conteúdos que se repetem entre as views, como o header, footer, sidbar e outros
+
+            - ```
+                - Template 
+                    @yield('content', 'Default content')
+
+                - View
+                    @section('content')
+                        @each('user.user', $users, 'user')
+                    @endsection
+              ``` 
