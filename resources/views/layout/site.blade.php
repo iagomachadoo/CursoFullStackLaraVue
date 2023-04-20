@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    {{-- Incluindo código --}}
+    @stack('css')
+
     <title>@yield('title', 'Laravel App')</title>
 </head>
 <body>
@@ -28,6 +32,8 @@
     {{-- O @section é utilizado para inserir blocos de códigos, como um sidbar, um header, footer e outros --}}
      
     @yield('conteudo', 'Conteudo padrão do yeld')
+
+    @stack('scripts')
 
 </body>
 </html>
