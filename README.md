@@ -350,13 +350,13 @@
 - Layouts usando herança de modelo
     - Várias páginas dentro de um app usam a mesma estrutura, como o header e o footer, além da estrutura padrão html. Para evitar a repetição dessas estruturas em todas a views, podemos usar a herança de modelo
 
-    - Criamos um arquivo que terá a estrutura padrão do layout e nos demais arquivos que usaram essa estrutura, devemos declarar a diretiva **@extends()** passando o caminho do arquivo com a estrutura padrão. Essa diretiva estender o layout padrão para as demais views
+    - Criamos um arquivo que terá a estrutura padrão do layout e nos demais arquivos que usarão essa estrutura, devemos declarar a diretiva **@extends()** passando o caminho do arquivo com a estrutura padrão. Essa diretiva estende o layout padrão para as demais views
 
     - Podemos injetar conteúdo dentro do layout padrão de algumas formas
         - Com o **@section**
             - A diretiva **@section** dentro do layout padrão, serve para criarmos uma sessão dentro do layout que receberá o conteúdo das páginas que estão usando esse template. Para que possamos injetar conteúdo nessa section, ela deve terminar com **@show** ou invés de **@endsection**
 
-            - Quando utilizamos **@section @show** podemos criar blocos html dentro dessa sessão com uma estrutura padrão, e nas views que usaram esse template, podemo herdar essa estrutura padrão com a diretiva **@parent**
+            - Quando utilizamos **@section @show** podemos criar blocos html dentro dessa sessão com uma estrutura padrão, e nas views que usarão esse template, podemo herdar essa estrutura padrão com a diretiva **@parent**
 
             - E além de herdar a estrutura padrão da section, podemos adicionar mais conteúdo 
 
@@ -399,3 +399,24 @@
                         @each('user.user', $users, 'user')
                     @endsection
               ``` 
+- Empilhando conteúdo em determinadas views [doc](https://laravel.com/docs/10.x/blade#stacks)
+    - A diretiva **@stack** possibilita que adicionemos arquivos e códigos css e js em views específicas
+
+    - Assim, podemos incluir código apenas onde ele será usado, fazendo com que a página só carregue o que ela realmente irá usar
+
+    - ```
+        - Template
+            //@stack cria o espaço pro conteúdo
+            @stack('scripts')
+
+        - View
+            //@push empurra de fato o conteúdo
+            @push('scripts')
+                <script src="/example.js"></script>
+            @endpush
+      ```
+
+    - O conteúdo é inserido de forma sequencial, ou seja, do primeiro para o último, então o último conteúdo a ser inserido na stack estará na última posição da pilha. Contudo existem meios de inserir um conteúdo no começo da pilha
+
+    - Podemos empilhar um arquivo no começo da pilha utilizando a diretiva **@prepend**
+        `@prepend('scripts') <script src="/example.js"></script> @endprepend`
