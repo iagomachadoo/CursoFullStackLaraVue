@@ -10,12 +10,16 @@ use Illuminate\View\Component;
 class UserList extends Component
 {
     public $users;
+    public $type;
+    public $class;
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public function __construct($type = 'lista', $class = 'bg-initial')
     {
         $this->users = User::all();
+        $this->type = $type;
+        $this->class = $class;
     }
 
     /**

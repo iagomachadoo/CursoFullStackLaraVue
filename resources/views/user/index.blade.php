@@ -38,7 +38,9 @@
     <x-user></x-user>
 
     {{-- Renderizando um componente dentor de um subdiretório --}}
-    <x-user.user-list></x-user.user-list>
+    <x-user.user-list/>
+    
+    <x-user.user-list type="card" class="bg-red"/>
 
 
     {{-- @each('user.user', $users, 'user') --}}

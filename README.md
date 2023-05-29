@@ -457,3 +457,42 @@
 
 - Como um componente tem um ciclo de vida por sí só e conseguimos passar dados para ele através do método **__construct**, não precisamos de um controller e podemos utilizar o router **view**
     - `Route::view(uri, view);`
+
+- Passando dados para componentes
+    - Podemos tornar os componentes ainda mais flexíveis quando passamos dados utilizando atributos html
+        -   ```
+                // Valores primitivos embutidos em código podem ser passados ​​para o componente usando strings de atributo HTML simples (type="error")
+
+                // As expressões e variáveis ​​PHP devem ser passadas para o componente por meio de atributos que usam o :caractere como prefixo (:message="$message")
+
+                <x-alert type="error" :message="$message"/>
+            ```
+
+        - Dessa forma conseguimos atribuir comportamentos diferentes para o mesmo componente de acordo com o valor do atributo
+
+        - É necessário definir todos os atributos de dados do componente em seu construtor de classe. Todas as propriedades públicas em um componente serão automaticamente disponibilizadas para a exibição do componente
+            -   ```
+                    // Classe do componente
+
+                    // O valor passado no atributo do componente será atribuído ao valor do parâmetro da função construtora
+
+                    // Contudo, se caso não passemos nenhum valor como atributo para o componente, teremos um erro e a aplicação será paralisada, assim devemos passar um valor default para o parâmetro da função
+
+                    class UserList extends Component
+                    {
+                        public $users;
+                        public $type;
+                        
+                        public function __construct($type = 'lista')
+                        {
+                            $this->users = User::all();
+                            $this->type = $type;
+                        }
+
+                    }
+
+                    // Renderizando o componente
+                    <x-user.user-list/> (Sem o atributo type declarado, ele terá por padrão o valor lista passado como default na função construtora)
+
+                    <x-user.user-list type="card"/> (Com o atributo type definido, essa valor será o atribuído ao parâmetro da função construtora)
+                ``` 
