@@ -420,3 +420,22 @@
 
     - Podemos empilhar um arquivo no começo da pilha utilizando a diretiva **@prepend**
         `@prepend('scripts') <script src="/example.js"></script> @endprepend`
+
+## Componentes [doc](https://laravel.com/docs/10.x/blade#components)
+- Em um contexto padrão de uso do blade template, enviamos dados para as views através dos métodos do controller, dessa forma temos ums relação muito forte entre view/controller
+
+- No contexto do uso de componentes, essa relação se torna fraca e flexível porque um componente vive em um encapsulamento isolado podendo ser aplicado em qualquer parte do projeto
+
+- Ou seja, no Laravel, um componente é uma unidade de funcionalidade encapsulada que pode ser reutilizada em diferentes partes de um aplicativo. É construído como uma classe e segue o padrão de projeto "Componente". Os componentes ajudam a modularizar e organizar o código, tornando-o mais legível e fácil de manter. Eles lidam com tarefas específicas, como notificações, autenticação, upload de arquivos, etc. Podem ser distribuídos como pacotes Composer para serem compartilhados entre projetos Laravel.
+
+- Comando para criar um componente
+    - `php artisan make:component NomeComponente`
+
+    - Criando componentes dentro de subdiretórios
+        - `php artisan make:component Forms/Input` 
+
+    -  Esse comando cria um componente baseado em classes
+
+    - Será criado um diretório **app/View/Components** com a classe referente ao componente
+
+    - Também será criado um modelo de exibição para o componente dentro do diretório **resources/views/components**
