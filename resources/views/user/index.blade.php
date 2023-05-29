@@ -22,19 +22,23 @@
 
 @section('sidbar')
     {{-- A diretiva @parent serve para incluirmos o valor padrão da section mais os novos valores passados --}}
-    @parent
+    {{-- @parent --}}
 
-    <ul>
+    {{-- <ul>
         <li>Menu secundáio 1</li>
         <li>Menu secundáio 2</li>
         <li>Menu secundáio 3</li>
-    </ul>
+    </ul> --}}
 
 @endsection
 
 @section('conteudo')
 
-    @each('user.user', $users, 'user')
+    {{-- Renderizando um componente --}}
+    <x-user></x-user>
+
+
+    {{-- @each('user.user', $users, 'user') --}}
 
 @endsection
 

@@ -422,6 +422,7 @@
         `@prepend('scripts') <script src="/example.js"></script> @endprepend`
 
 ## Componentes [doc](https://laravel.com/docs/10.x/blade#components)
+
 - Em um contexto padrão de uso do blade template, enviamos dados para as views através dos métodos do controller, dessa forma temos ums relação muito forte entre view/controller
 
 - No contexto do uso de componentes, essa relação se torna fraca e flexível porque um componente vive em um encapsulamento isolado podendo ser aplicado em qualquer parte do projeto
@@ -439,3 +440,20 @@
     - Será criado um diretório **app/View/Components** com a classe referente ao componente
 
     - Também será criado um modelo de exibição para o componente dentro do diretório **resources/views/components**
+
+- Renderizando um componente
+    - Para renderizarmos um componente, podemos usar a tag de componente balde que começam com a string **x-** seguido pelo nome da classe do componente
+
+    -   ```
+        <x-alert/>
+ 
+        <x-user-profile/>
+
+        // Para classes aninhadas dentro de app/Views/Components
+        // Exemplo de classe aninhada - app/View/Components/Inputs/Button.php
+        <x-inputs.button/>
+
+        ```
+
+- Como um componente tem um ciclo de vida por sí só e conseguimos passar dados para ele através do método **__construct**, não precisamos de um controller e podemos utilizar o router **view**
+    - `Route::view(uri, view);`
