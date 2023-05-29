@@ -37,6 +37,9 @@
     {{-- Renderizando um componente --}}
     <x-user></x-user>
 
+    {{-- Renderizando um componente dentor de um subdiretório --}}
+    <x-user.user-list></x-user.user-list>
+
 
     {{-- @each('user.user', $users, 'user') --}}
 
