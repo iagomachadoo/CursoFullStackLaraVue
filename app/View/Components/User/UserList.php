@@ -2,24 +2,34 @@
 
 namespace App\View\Components\User;
 
-use App\Models\User;
+// use App\Models\User;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class UserList extends Component
 {
-    public $users;
-    public $type;
-    public $class;
+    // public $users;
+    // public $type;
+    // public $class;
     /**
      * Create a new component instance.
      */
-    public function __construct($type = 'lista', $class = 'bg-initial')
+    // public function __construct($type = 'lista', $class = 'bg-initial')
+    // {
+    //     $this->users = User::all();
+    //     $this->type = $type;
+    //     $this->class = $class;
+    // }
+
+    public $users;
+    public $type;
+
+    public function __construct($users = null, $type = 'lista')
     {
-        $this->users = User::all();
+        $this->users = $users;
         $this->type = $type;
-        $this->class = $class;
+        
     }
 
     /**

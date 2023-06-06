@@ -411,4 +411,6 @@ Route::options();
 // Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
 // Como a view user.index está renderizando um componente, não precisamos de um controller para enviarmos os dados, então podemos usar o router view 
-Route::view('/users', 'user.index');
+// Route::view('/users', 'user.index');
+
+Route::get('/users', [UserController::class, 'index']);

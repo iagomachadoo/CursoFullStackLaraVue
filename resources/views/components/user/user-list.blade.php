@@ -1,4 +1,5 @@
-<div class="container">
+<div class="container py-5">
+    {{-- {{dd($users)}} --}}
     {{$attributes}}
     @if ($type === 'lista')
         <ul class="list-group mb-5">
@@ -6,7 +7,7 @@
                 <li class="list-group-item">{{ $user->name}} - {{ $user->email }}</li>
             @endforeach
         </ul>
-    @elseif ($type === 'card' && $class === 'bg-red')
+    @elseif ($type === 'card')
         @foreach($users as $user)
             <div class="card mb-3 bg-danger text-white" style="width: 18rem;">
                 <div class="card-body">

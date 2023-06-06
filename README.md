@@ -496,3 +496,13 @@
 
                     <x-user.user-list type="card"/> (Com o atributo type definido, essa valor será o atribuído ao parâmetro da função construtora)
                 ``` 
+
+    - Contudo, um componente quando recebe os dados diretamente do banco de dados, passa a ter uma relacionamento com ele muito forte, tornando esse componente menos flexível. 
+    
+    - Portanto, uma forma de deixar o componente mais flexível é dar um passo atrás, deixando toda a regra de negócio pro controller e passando os dados pro componente, assim, esse componente se torna altamente flexível
+
+    - Para isso, o roteamento e o controller passam a ter o funcionamento padrão, mas o componente recebe os dados do controller através de um atributo. O atributo que vai receber os dados deve ter o prefixo **:**
+        -   ```
+                // :message="$message" - recebendo os dados do controller
+                <x-alert type="error" :message="$message"/>
+            ```

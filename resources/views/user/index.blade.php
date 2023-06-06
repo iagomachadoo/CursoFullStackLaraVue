@@ -33,14 +33,17 @@
 @endsection
 
 @section('conteudo')
-
+    {{-- {{dd($users)}} --}}
     {{-- Renderizando um componente --}}
-    <x-user></x-user>
+    {{-- <x-user></x-user> --}}
 
     {{-- Renderizando um componente dentor de um subdiretório --}}
-    <x-user.user-list/>
+    {{-- <x-user.user-list/> --}}
     
-    <x-user.user-list type="card" class="bg-red"/>
+    {{-- <x-user.user-list type="card" class="bg-red"/> --}}
+
+
+    <x-user.user-list type="card" :users="$users"/>
 
 
     {{-- @each('user.user', $users, 'user') --}}
