@@ -43,7 +43,7 @@
     {{-- <x-user.user-list type="card" class="bg-red"/> --}}
 
 
-    <x-user.user-list type="card" :users="$users"/>
+    <x-user.user-list type="card" :users="$users"  card-class="danger"/>
 
 
     {{-- @each('user.user', $users, 'user') --}}

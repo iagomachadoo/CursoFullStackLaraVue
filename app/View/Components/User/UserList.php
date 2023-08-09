@@ -24,11 +24,13 @@ class UserList extends Component
 
     public $users;
     public $type;
+    public $cardClass;
 
-    public function __construct($users = null, $type = 'lista')
+    public function __construct($users = null, $type = 'lista', $cardClass = 'success')
     {
         $this->users = $users;
         $this->type = $type;
+        $this->cardClass = $cardClass;
         
     }
 
