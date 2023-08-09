@@ -521,3 +521,14 @@
                 // View do componente
                 bg-{{ $isSelected($user->id) ? 'info' : $cardClass }}
             ```
+
+- Podemos criar atributos para serem injetados na raiz do nosso componente, e que não serão declarados na sua classe, ou seja, atributos padrão do html como, uma classe e um id são acessados através da variável **$attributes**. Portanto, todo atributo que for passado para o componente e que não esteja listado dentro da sua classe, estarão acessíveis nessa variável **$attributes**
+    -   ```
+        // Os atributos class e id serão inseridos na raiz do componente através da variável $attributes
+        
+        // View do componente
+        <div {{ $attributes }}> ... </div>
+
+        // Renderização do componente
+        <x-user.user-list type="card" :users="$users"  card-class="danger" class="container py-5" id="atributo-raiz"/>
+        ```

@@ -1,6 +1,6 @@
-<div class="container py-5">
+<div {{ $attributes }}>
     {{-- {{dd($users)}} --}}
-    {{$attributes}}
+    {{-- {{$attributes}} --}}
     @if ($type === 'lista')
         <ul class="list-group mb-5">
             @foreach ($users as $user)
