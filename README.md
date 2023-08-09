@@ -509,3 +509,15 @@
 - Quando estivermos usando componentes do blade e javascript (vue, alphine ...) juntamente, o laravel pode se confundir com a sintaxe usada pelos frameworks js, no que diz respeito ao atributos dos componentes, tanto os componentes laravel como os javascript, utilizam a **sintaxe :**, logo, para evitar erros, no componente laravel, basta usarmos a **sintaxe ::**
 
 - Em relação a escrita das variáveis, o indicado é usar o **CamelCase** nas variáveis no **controller e na viwe** e no componente, o formato **kebab-case**
+
+- Podemos criar métodos públicos dentro da classe do componentes, alterando suas características da forma que quisermos
+    - Por exemplo, o trecho de código a seguir mudar o background de um elemento que satisfazer a condição imposta
+        -   ```
+                // Classe co componente
+                public function isSelected($userId){
+                    return $userId === 3;
+                }
+
+                // View do componente
+                bg-{{ $isSelected($user->id) ? 'info' : $cardClass }}
+            ```
