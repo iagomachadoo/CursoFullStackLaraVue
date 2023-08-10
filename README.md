@@ -532,3 +532,21 @@
         // Renderização do componente
         <x-user.user-list type="card" :users="$users"  card-class="danger" class="container py-5" id="atributo-raiz"/>
         ```
+
+- Mesclando atributos [doc](https://laravel.com/docs/10.x/blade#default-merged-attributes)
+    - Podemos mesclar atributos do componente com atributos padrão do html
+    - Como no exemplo abaixo, estamos mesclando a classe com atributos dinâmicos do componente com atributos padrão do html. Essa é uma forma de deixar o componente mais flexível, podendo aceitar atributos adicionais 
+        -   ```
+                // View do Componente
+                <div {{ $attributes->merge(['class' => 'alert alert-'.$type]) }}>
+                    {{ $message }}
+                </div>
+
+                // Componente
+                <x-alert type="error" :message="$message" class="mb-4"/>
+
+                // Componente renderizado
+                <div class="alert alert-error mb-4">
+                    <!-- Contents of the $message variable -->
+                </div>
+            ```

@@ -33,20 +33,20 @@
 @endsection
 
 @section('conteudo')
-    {{-- {{dd($users)}} --}}
-    {{-- Renderizando um componente --}}
-    {{-- <x-user></x-user> --}}
+    <div class="container py-5">
+        {{-- {{dd($users)}} --}}
+        {{-- Renderizando um componente --}}
+        {{-- <x-user></x-user> --}}
+        {{-- Renderizando um componente dentor de um subdiretório --}}
+        {{-- <x-user.user-list/> --}}
+        
+        {{-- <x-user.user-list type="card" class="bg-red"/> --}}
 
-    {{-- Renderizando um componente dentor de um subdiretório --}}
-    {{-- <x-user.user-list/> --}}
-    
-    {{-- <x-user.user-list type="card" class="bg-red"/> --}}
+        <x-form.button name="Salvar" variant="success" id="btn-salvar"></x-form.button>
+        <x-user.user-list type="card" :users="$users"  card-class="danger" class="py-5" id="atributo-raiz"/>
 
-
-    <x-user.user-list type="card" :users="$users"  card-class="danger" class="container py-5" id="atributo-raiz"/>
-
-
-    {{-- @each('user.user', $users, 'user') --}}
+        {{-- @each('user.user', $users, 'user') --}}
+    </div>
 
 @endsection
 
