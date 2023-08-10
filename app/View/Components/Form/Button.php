@@ -10,14 +10,18 @@ class Button extends Component
 {
     // Atributos públicos do componente
     public $name;
+    public $type;
+    public $isRed;
     public $variant;
 
     /**
      * Create a new component instance.
      */
-    public function __construct(string $name, string $variant)
+    public function __construct(string $name, string $type, bool $isRed, string $variant)
     {
         $this->name = $name;
+        $this->type = $type;
+        $this->isRed = $isRed;
         $this->variant = $variant;
     }
 

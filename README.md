@@ -550,3 +550,16 @@
                     <!-- Contents of the $message variable -->
                 </div>
             ```
+
+- Mesclando classes condicionalmente
+    - Podemos mesclar atributos baseados em uma condição. Para fazermos isso, devemos usar o método **class()**
+    - Como no exemplo abaixo. A classe 'bg-red' só será usada caso a condição $hasError seja verdadeira. Podemos também encadear o método merge para mesclar classes
+        -   ```
+                <button {{ $attributes->class(['p-4', 'bg-red' => $hasError])->merge(['type' => 'button']) }}>
+                    {{ $slot }}
+                </button>
+
+                <button {{ $attributes->class(['btn', 'btn-danger' => $isRed])->merge(['id' => 'btn-'.$variant, 'type' => $type]) }}>
+                    {{$name}}
+                </button>
+            ```

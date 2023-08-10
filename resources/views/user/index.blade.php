@@ -42,7 +42,8 @@
         
         {{-- <x-user.user-list type="card" class="bg-red"/> --}}
 
-        <x-form.button name="Salvar" variant="success" id="btn-salvar"></x-form.button>
+        <x-form.button name="Salvar" :isRed='false' variant="save" type="submit"></x-form.button>
+        <x-form.button name="Excluir" isRed variant="delet" type="submit"></x-form.button>
         <x-user.user-list type="card" :users="$users"  card-class="danger" class="py-5" id="atributo-raiz"/>
 
         {{-- @each('user.user', $users, 'user') --}}
