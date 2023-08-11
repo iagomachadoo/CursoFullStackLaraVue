@@ -14,7 +14,9 @@
         'user-permision' => $attributes->prepends('salvar')
     ]) 
 }}>
-
-    {{$name}}
+    {{-- Filtrando atributo com closure --}}
+    {{-- {{ $attributes->filter(fn (string $value, string $key) => $key == 'type') }} --}}
+    
+    {{-- {{$name}} --}}
 
 </button>

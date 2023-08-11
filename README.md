@@ -601,3 +601,6 @@
                     Olá, mundo
                 </x-component>
             ```
+
+- Se quisermos adicionar atributos fora da raiz do elemento, ou seja, em elementos filhos, podemos usar o filtro, que nos possibilita isolar um atributo em específico
+    - [Documentação](https://laravel.com/docs/10.x/blade#filtering-attributes)
