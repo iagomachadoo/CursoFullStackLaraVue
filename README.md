@@ -563,3 +563,41 @@
                     {{$name}}
                 </button>
             ```
+
+- Podemos mesclar atributos não pertencentes a classe, ou seja, não são atributos injetados. Esse caso é particularmente útil para criarmos atributos com valores padrão para um elemento, e caso precise, podemos sobrescrever esse valor
+    - Como no exemplo abaixo, declaramos um valor padrão pro atributo type de botão, mas quando invocamos o componente, passamos outro valor, sobrescrevendo o valor padrão
+        -   ```
+                // View do componente
+                <button {{ $attributes->merge(['type' => 'button']) }}>
+                    {{ $slot }}
+                </button>
+
+                // Invocando o componente
+                <x-button type="submit">
+                    Submit
+                </x-button>
+
+                // Componente renderizado
+                <button type="submit">
+                    Submit
+                </button>
+            ```
+
+- Mas se quisermos que um atributo tenha valores padrão e injetados, podemos usar o método **prepend()** para concatenar esses valores
+    - Como no exemplo abaixo,ambos os valores pro atributo data-controller foram concatenados
+        -   ```
+                // View do componente
+                <div {{ $attributes->merge(['data-controller' => $attributes->prepends('profile-controller')]) }}>
+                    {{ $slot }}
+                </div>
+
+                // Invocando componente
+                <x-component data-controller="user-controller">
+                    Olá, mundo
+                </x-component>
+
+                // Componente renderizado
+                <x-component data-controller="profile-controller user-controller">
+                    Olá, mundo
+                </x-component>
+            ```

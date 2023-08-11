@@ -4,6 +4,17 @@
 </button> --}}
 
 {{-- Mesclagem de classes condicional --}}
-<button {{ $attributes->class(['btn', 'btn-danger' => $isRed])->merge(['id' => 'btn-'.$variant, 'type' => $type]) }}>
+<button {{ $attributes->class([
+    'btn', 'btn-danger' => $isRed
+    ])
+    ->merge([
+        'id' => 'btn-'.$variant, 
+        'type' => $type, 
+        'data-url' => 'https://...',
+        'user-permision' => $attributes->prepends('salvar')
+    ]) 
+}}>
+
     {{$name}}
+
 </button>
