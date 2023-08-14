@@ -44,7 +44,7 @@
 
         <x-form.button name="Salvar" :isRed='false' variant="save" type="submit"></x-form.button>
 
-        <x-form.button name="Excluir" isRed variant="delet" type="submit" data-url="https://google.com" user-permision="deletar"></x-form.button>
+        <x-form.button name="Excluir" isRed variant="delet" type="submit" data-url="https://google.com" user-permision="deletar" text-color="primary"></x-form.button>
 
         <x-user.user-list type="card" :users="$users"  card-class="danger" class="py-5" id="atributo-raiz"/>
 

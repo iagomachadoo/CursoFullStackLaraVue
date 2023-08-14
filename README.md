@@ -602,5 +602,21 @@
                 </x-component>
             ```
 
-- Se quisermos adicionar atributos fora da raiz do elemento, ou seja, em elementos filhos, podemos usar o filtro, que nos possibilita isolar um atributo em específico
+- Se quisermos adicionar atributos fora da raiz do elemento, ou seja, em elementos filhos, podemos usar o filtro, que nos possibilita isolar um atributo em específico. Contudo, esse filtro só funciona nos atributos que foram declarados fora da classe do elemento, ou seja, que são acessíveis na variável **$attributes**
     - [Documentação](https://laravel.com/docs/10.x/blade#filtering-attributes)
+
+    - Exemplos
+        -   ```
+                // Filtrando com closure
+                // Esse filtro retornara o atributo passado como parâmetro e seu valor
+                {{ $attributes->filter(fn (string $value, string $key) => $key == 'data-url') }}
+
+                // Recupera todos os atributos cuja chave comece com uma determinada string
+                {{ $attributes->whereStartsWith('user') }}
+
+                // Recupera todos os atributos cuja chave não comece com uma determinada string
+                {{ $attributes->whereDoesntStartWith('user') }}
+
+                // Adicionando o método first() podemos renderizar o primeiro valor do atributo em um determinado pacote de atributos
+                {{ $attributes->whereStartsWith('data-url')->first() }}
+            ```
